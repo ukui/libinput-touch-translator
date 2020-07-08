@@ -11,6 +11,7 @@
 #include "touch-screen/touch-screen-five-finger-zoom-gesture.h"
 
 #include "settings-manager.h"
+#include "uinput-helper.h"
 
 #include <QThread>
 
@@ -23,6 +24,8 @@ int main(int argc, char *argv[])
     // init manager
     auto manager = TouchScreenGestureManager::getManager();
     SettingsManager::getManager();
+
+    UInputHelper::getInstance();
 
     // init gesutre and register into gesture manager
     TouchScreenThreeFingerSwipeGesture *threeFingerSwipe = new TouchScreenThreeFingerSwipeGesture(manager);

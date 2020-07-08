@@ -3,6 +3,7 @@
 #include "touch-screen-gesture-interface.h"
 
 #include "settings-manager.h"
+#include "uinput-helper.h"
 
 #include <QDebug>
 
@@ -76,6 +77,8 @@ void TouchScreenGestureManager::onGestureFinished(int index)
     auto settingsManager = SettingsManager::getManager();
     auto shortCut = settingsManager->getShortCut(gesture, TouchScreenGestureInterface::Finished, gesture->totalDirection());
     qDebug()<<shortCut;
+
+    UInputHelper::getInstance()->executeShortCut(shortCut);
 
     // reset all gesture
     for (auto gesture : m_gestures) {

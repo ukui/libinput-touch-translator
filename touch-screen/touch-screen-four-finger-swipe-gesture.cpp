@@ -93,7 +93,7 @@ TouchScreenGestureInterface::State TouchScreenFourFingerSwipeGesture::handleInpu
         auto current_center_points = (m_current_points[0] + m_current_points[1] + m_current_points[2] + m_last_points[3])/4;
         auto delta = current_center_points - last_center_points;
         auto offset = delta.manhattanLength();
-        if (offset < 20) {
+        if (offset < 25) {
             return Ignore;
         }
 
@@ -146,7 +146,7 @@ TouchScreenGestureInterface::Direction TouchScreenFourFingerSwipeGesture::totalD
     auto current_center_points = (m_current_points[0] + m_current_points[1] + m_current_points[2] + m_current_points[3])/4;
     auto delta = current_center_points - start_center_points;
     auto offset = delta.manhattanLength();
-    if (offset < 20) {
+    if (offset < 25) {
         return None;
     }
 

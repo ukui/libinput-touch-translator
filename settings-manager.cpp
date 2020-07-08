@@ -2,6 +2,8 @@
 
 #include <QSettings>
 
+#include <QDebug>
+
 static SettingsManager *instance = nullptr;
 
 SettingsManager::SettingsManager(QObject *parent) : QObject(parent)
@@ -14,21 +16,53 @@ SettingsManager::SettingsManager(QObject *parent) : QObject(parent)
     m_touchScreenGestureState = gestureState;
     m_touchScreenGestureType = gestureType;
 
-    m_settings = new QSettings("ukui", "libinput-gesture-translator", this);
+    m_settings = new QSettings(QSettings::SystemScope, "ukui", "gestures", this);
+    qDebug()<<m_settings->fileName();
 
     m_settings->beginGroup("touch screen");
     if (m_settings->childGroups().isEmpty()) {
+        // swipe group
         m_settings->beginGroup(gestureType.valueToKey(TouchScreenGestureInterface::GestureType::Swipe));
         m_settings->beginWriteArray(gestureState.valueToKey(TouchScreenGestureInterface::Finished));
         m_settings->setArrayIndex(3);
+
         auto left = direction.valueToKey(TouchScreenGestureInterface::Direction::Left);
         m_settings->setValue(left, QKeySequence("Alt+Left"));
         auto right = direction.valueToKey(TouchScreenGestureInterface::Direction::Right);
         m_settings->setValue(right, QKeySequence("Alt+Right"));
+
+        m_settings->setArrayIndex(4);
+        m_settings->setValue(left, QKeySequence("Alt+Shift+Tab"));
+        m_settings->setValue(right, QKeySequence("Alt+Tab"));
+
+        m_settings->setArrayIndex(5);
+        m_settings->setValue(left, QKeySequence("Ctrl+Alt+Left"));
+        m_settings->setValue(right, QKeySequence("Ctrl+Alt+Right"));
+
         m_settings->endArray();
+
+        m_settings->endGroup();
+
+        // zoom group
+        m_settings->beginGroup(gestureType.valueToKey(TouchScreenGestureInterface::GestureType::Zoom));
+        m_settings->beginWriteArray(gestureState.valueToKey(TouchScreenGestureInterface::Finished));
+
+        m_settings->setArrayIndex(4);
+        auto zoomIn = direction.valueToKey(TouchScreenGestureInterface::Direction::ZoomIn);
+        m_settings->setValue(zoomIn, QKeySequence("F11"));
+        auto zoomOut = direction.valueToKey(TouchScreenGestureInterface::Direction::ZoomOut);
+        m_settings->setValue(zoomOut, QKeySequence("F11"));
+
+        m_settings->setArrayIndex(5);
+        m_settings->setValue(zoomIn, QKeySequence("F11"));
+        m_settings->setValue(zoomOut, QKeySequence("F11"));
+
+        m_settings->endArray();
+
         m_settings->endGroup();
     }
     m_settings->endGroup();
+    m_settings->sync();
 }
 
 SettingsManager *SettingsManager::getManager()
@@ -61,4 +95,5 @@ void SettingsManager::setShortCut(TouchScreenGestureInterface::GestureType type,
     m_settings->endArray();
     m_settings->endGroup();
     m_settings->endGroup();
+    m_settings->sync();
 }

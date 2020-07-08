@@ -1,4 +1,4 @@
-QT += gui
+QT += gui KGlobalAccel
 
 CONFIG += c++11 console link_pkgconfig
 CONFIG -= app_bundle
@@ -21,7 +21,8 @@ include(touch-screen/touch-screen.pri)
 SOURCES += \
         event-monitor.cpp \
         main.cpp \
-        settings-manager.cpp
+        settings-manager.cpp \
+        uinput-helper.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -30,4 +31,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     event-monitor.h \
-    settings-manager.h
+    settings-manager.h \
+    uinput-helper.h
