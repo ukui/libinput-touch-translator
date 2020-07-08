@@ -1,5 +1,7 @@
 #include "event-monitor.h"
 
+#include "touch-screen/touch-screen-gesture-manager.h"
+
 #include <libudev.h>
 #include <linux/uinput.h>
 #include <fcntl.h>
@@ -9,18 +11,18 @@
 
 static int open_restricted(const char *path, int flags, void *user_data)
 {
-        int fd = open(path, flags);
-        return fd < 0 ? -errno : fd;
+    int fd = open(path, flags);
+    return fd < 0 ? -errno : fd;
 }
 
 static void close_restricted(int fd, void *user_data)
 {
-        close(fd);
+    close(fd);
 }
 
 const static struct libinput_interface interface = {
-        .open_restricted = open_restricted,
-        .close_restricted = close_restricted,
+    .open_restricted = open_restricted,
+    .close_restricted = close_restricted,
 };
 
 EventMonitor::EventMonitor(QObject *parent) : QObject(parent)
@@ -89,28 +91,20 @@ void EventMonitor::startMonitor()
 
                 // handle the event here
                 auto type = libinput_event_get_type(event);
-                printf("loop\n");
+                //printf("loop\n");
                 switch (type) {
-                case LIBINPUT_EVENT_DEVICE_ADDED: {
-                    libinput_device *dev = libinput_event_get_device(event);
-                    const char *name = libinput_device_get_name(dev);
-                    printf("%s added\n", name);
-                    libinput_device_config_send_events_set_mode(dev, LIBINPUT_CONFIG_SEND_EVENTS_ENABLED);
-                    if (libinput_device_has_capability(dev, LIBINPUT_DEVICE_CAP_TOUCH)) {
-                        printf("has cap touch\n");
-                        libinput_device_ref(dev);
-                    }
-                    break;
-                }
                 case LIBINPUT_EVENT_TOUCH_DOWN:
                 case LIBINPUT_EVENT_TOUCH_MOTION:
                 case LIBINPUT_EVENT_TOUCH_UP:
                 case LIBINPUT_EVENT_TOUCH_FRAME:
                 case LIBINPUT_EVENT_TOUCH_CANCEL:
-                    printf("touch event %d\n", type);
+                    //printf("touch event %d\n", type);
+                    if (m_touch_screen_gesture_manager) {
+                        m_touch_screen_gesture_manager->processEvent(event);
+                    }
                     break;
                 default:
-                    printf("other event %d\n", type);
+                    //printf("other event %d\n", type);
                     break;
                 }
                 libinput_event_destroy(event);
@@ -119,6 +113,10 @@ void EventMonitor::startMonitor()
         } while (/*!stop && */poll(&fds, 1, -1) > -1);
     }
 
-    printf("loop end2\n");
     libinput_unref(li);
+}
+
+void EventMonitor::initTouchScreenGestureManager(TouchScreenGestureManager *manager)
+{
+    m_touch_screen_gesture_manager = manager;
 }

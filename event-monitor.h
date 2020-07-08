@@ -5,6 +5,8 @@
 
 #include <libinput.h>
 
+class TouchScreenGestureManager;
+
 class EventMonitor : public QObject
 {
     Q_OBJECT
@@ -18,7 +20,10 @@ public:
 
     explicit EventMonitor(QObject *parent = nullptr);
 
+public slots:
     void startMonitor();
+
+    void initTouchScreenGestureManager(TouchScreenGestureManager *manager);
 
 signals:
     void touchscreenGestureRequest(int fingerCount, ActionType type);
@@ -26,6 +31,8 @@ signals:
 
 private:
     libinput *m_input;
+
+    TouchScreenGestureManager *m_touch_screen_gesture_manager = nullptr;
 };
 
 #endif // EVENTMONITOR_H

@@ -9,11 +9,12 @@ class TouchScreenGestureInterface;
 
 class TouchScreenGestureManager : public QObject
 {
+    friend class TouchScreenGestureInterface;
     Q_OBJECT
 public:
-    explicit TouchScreenGestureManager(QObject *parent = nullptr);
+    static TouchScreenGestureManager *getManager();
 
-    int registerGesuture(TouchScreenGestureInterface *gesture); // return a index of registered gesture.
+    int queryGestureIndex(TouchScreenGestureInterface *gesture);
 
     void processEvent(libinput_event *event);
 signals:
@@ -25,6 +26,9 @@ public slots:
     void onGestureFinished(int index);
 
 private:
+    int registerGesuture(TouchScreenGestureInterface *gesture); // return a index of registered gesture.
+
+    explicit TouchScreenGestureManager(QObject *parent = nullptr);
     QList<TouchScreenGestureInterface *> m_gestures;
 };
 
