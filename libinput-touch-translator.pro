@@ -1,4 +1,4 @@
-QT -= gui
+QT += gui
 
 CONFIG += c++11 console link_pkgconfig
 CONFIG -= app_bundle
@@ -20,7 +20,8 @@ include(touch-screen/touch-screen.pri)
 
 SOURCES += \
         event-monitor.cpp \
-        main.cpp
+        main.cpp \
+        settings-manager.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -28,4 +29,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    event-monitor.h
+    event-monitor.h \
+    settings-manager.h

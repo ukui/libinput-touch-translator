@@ -2,6 +2,8 @@
 
 #include "touch-screen-gesture-interface.h"
 
+#include "settings-manager.h"
+
 #include <QDebug>
 
 static TouchScreenGestureManager *instance = nullptr;
@@ -70,6 +72,10 @@ void TouchScreenGestureManager::onGestureFinished(int index)
 {
     auto gesture = m_gestures.at(index);
     qDebug()<<gesture->finger()<<"finger"<<gesture->type()<<"finished, total direction:"<<gesture->totalDirection();
+
+    auto settingsManager = SettingsManager::getManager();
+    auto shortCut = settingsManager->getShortCut(gesture, TouchScreenGestureInterface::Finished, gesture->totalDirection());
+    qDebug()<<shortCut;
 
     // reset all gesture
     for (auto gesture : m_gestures) {
