@@ -80,7 +80,9 @@ UInputHelper::UInputHelper(QObject *parent) : QObject(parent)
     m_hash.insert("Delete", KEY_DELETE);
     m_hash.insert("Del", KEY_DOT);
     m_hash.insert("Plus", KEY_EQUAL);
+    m_hash.insert("=", KEY_EQUAL);
     m_hash.insert("Minus", KEY_MINUS);
+    m_hash.insert("-", KEY_MINUS);
     m_hash.insert("Backspace", KEY_BACKSPACE);
     m_hash.insert("Esc", KEY_ESC);
 

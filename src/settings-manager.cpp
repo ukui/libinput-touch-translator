@@ -34,8 +34,8 @@ SettingsManager::SettingsManager(QObject *parent) : QObject(parent)
         // swipe group
         m_settings->beginGroup(gestureType.valueToKey(TouchScreenGestureInterface::GestureType::Swipe));
         m_settings->beginWriteArray(gestureState.valueToKey(TouchScreenGestureInterface::Finished));
-        m_settings->setArrayIndex(3);
 
+        m_settings->setArrayIndex(3);
         auto left = direction.valueToKey(TouchScreenGestureInterface::Direction::Left);
         m_settings->setValue(left, QKeySequence("Alt+Left"));
         auto right = direction.valueToKey(TouchScreenGestureInterface::Direction::Right);
@@ -57,10 +57,14 @@ SettingsManager::SettingsManager(QObject *parent) : QObject(parent)
         m_settings->beginGroup(gestureType.valueToKey(TouchScreenGestureInterface::GestureType::Zoom));
         m_settings->beginWriteArray(gestureState.valueToKey(TouchScreenGestureInterface::Finished));
 
-        m_settings->setArrayIndex(4);
+        m_settings->setArrayIndex(3);
         auto zoomIn = direction.valueToKey(TouchScreenGestureInterface::Direction::ZoomIn);
-        m_settings->setValue(zoomIn, QKeySequence("F11"));
+        m_settings->setValue(zoomIn, QKeySequence("Ctrl+="));
         auto zoomOut = direction.valueToKey(TouchScreenGestureInterface::Direction::ZoomOut);
+        m_settings->setValue(zoomOut, QKeySequence("Ctrl+-"));
+
+        m_settings->setArrayIndex(4);
+        m_settings->setValue(zoomIn, QKeySequence("F11"));
         m_settings->setValue(zoomOut, QKeySequence("F11"));
 
         m_settings->setArrayIndex(5);
