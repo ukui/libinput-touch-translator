@@ -1,0 +1,2 @@
+systemctl stop ukui-touch.service
+systemctl disable ukui-touch.service

@@ -1,0 +1,2 @@
+systemctl enable ukui-touch.service
+systemctl restart ukui-touch.service

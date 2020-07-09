@@ -30,7 +30,12 @@ void UInputHelper::executeShortCut(const QKeySequence &shortCut)
     qDebug()<<list;
     auto keys = parseShortcut(shortCut);
     for (auto key: keys) {
-        report_key(EV_KEY, key, 1);
+        int ret = report_key(EV_KEY, key, 1);
+        if (ret != 0) {
+            qDebug()<<"failed, try recreate uinput";
+            creat_user_uinput();
+            report_key(EV_KEY, key, 1);
+        }
     }
     for (auto key: keys) {
         report_key(EV_KEY, key, 0);
@@ -165,7 +170,7 @@ int creat_user_uinput(void)
     ret = ioctl(uinput_fd, UI_DEV_CREATE);
     if(ret < 0){
         printf("%s:%d\n", __func__, __LINE__);
-        close(uinput_fd);
+        //close(uinput_fd);
         return ret;//error process.
     }
 }
