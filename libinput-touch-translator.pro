@@ -24,10 +24,12 @@ SOURCES += \
         settings-manager.cpp \
         uinput-helper.cpp
 
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
+target.path = /usr/libexec
 !isEmpty(target.path): INSTALLS += target
+
+service.files = systemd/ukui-touch.service
+service.path = /usr/lib/systemd/system
+INSTALLS += service
 
 HEADERS += \
     event-monitor.h \

@@ -1,0 +1,13 @@
+[Unit]
+Description=Translate touch event to keyborad shortcut
+After=boot-complete.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+ExecStart=/usr/libexec/libinput-touch-translator
+
+[Install]
+WantedBy=multi-user.target

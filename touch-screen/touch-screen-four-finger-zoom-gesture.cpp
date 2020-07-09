@@ -99,7 +99,7 @@ TouchScreenGestureInterface::State TouchScreenFourFingerZoomGesture::handleInput
         auto last_distance = (last_distance01 + last_distance02 + last_distance03)/3;
         auto current_distance = (current_distance01 + current_distance02 + current_distance03)/3;
         auto delta = current_distance - last_distance;
-        if (qAbs(delta) < 15) {
+        if (qAbs(delta) < 20) {
             return Ignore;
         }
 
@@ -159,9 +159,9 @@ TouchScreenGestureInterface::Direction TouchScreenFourFingerZoomGesture::totalDi
     auto current_distance = (current_distance01 + current_distance02 + current_distance03)/3;
     auto delta = current_distance - start_distance;
 
-    if (delta > 15) {
+    if (delta > 20) {
         return ZoomIn;
-    } else if (delta < -15) {
+    } else if (delta < -20) {
         return ZoomOut;
     }
 

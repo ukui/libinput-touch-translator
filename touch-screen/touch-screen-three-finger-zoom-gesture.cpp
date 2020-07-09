@@ -92,7 +92,7 @@ TouchScreenGestureInterface::State TouchScreenThreeFingerZoomGesture::handleInpu
         auto last_distance = (last_center02 - m_last_points[1]).manhattanLength();
         auto current_distance = (current_center02 - m_current_points[1]).manhattanLength();
         auto delta = current_distance - last_distance;
-        if (qAbs(delta) < 15) {
+        if (qAbs(delta) < 20) {
             return Ignore;
         }
 
@@ -147,9 +147,9 @@ TouchScreenGestureInterface::Direction TouchScreenThreeFingerZoomGesture::totalD
     auto current_distance = (current_center02 - m_current_points[1]).manhattanLength();
     auto delta = current_distance - start_distance;
 
-    if (delta > 15) {
+    if (delta > 20) {
         return ZoomIn;
-    } else if (delta < -15) {
+    } else if (delta < -20) {
         return ZoomOut;
     }
 
