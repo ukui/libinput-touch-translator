@@ -1,6 +1,6 @@
 [Unit]
 Description=Translate touch event to keyborad shortcut
-After=boot-complete.target
+After=multi-user.target
 StartLimitIntervalSec=0
 
 [Service]

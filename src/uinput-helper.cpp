@@ -183,7 +183,7 @@ int report_key(unsigned int type, unsigned int keycode, unsigned int value)
     key_event.value = value;
     ret = write(uinput_fd, &key_event, sizeof(struct input_event));
     if(ret < 0){
-        printf("%s:%d\n", __func__, __LINE__);
+        printf("%s failed:%d\n", __func__, __LINE__);
         return ret;//error process.
     }
 
