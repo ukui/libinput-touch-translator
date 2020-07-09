@@ -2,6 +2,8 @@
 
 #include <QSettings>
 
+#include <QFileSystemWatcher>
+
 #include <QDebug>
 
 static SettingsManager *instance = nullptr;
@@ -18,6 +20,14 @@ SettingsManager::SettingsManager(QObject *parent) : QObject(parent)
 
     m_settings = new QSettings(QSettings::SystemScope, "ukui", "gestures", this);
     qDebug()<<m_settings->fileName();
+
+    QFileSystemWatcher *watcher = new QFileSystemWatcher(QStringList()<<m_settings->fileName(), this);
+    connect(watcher, &QFileSystemWatcher::fileChanged, this, [=](){
+        qDebug()<<"file changed, sync";
+        m_settings->sync();
+        // we should rewatch the changed file.
+        watcher->addPath(m_settings->fileName());
+    });
 
     m_settings->beginGroup("touch screen");
     if (m_settings->childGroups().isEmpty()) {
