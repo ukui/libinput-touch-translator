@@ -85,6 +85,11 @@ UInputHelper::UInputHelper(QObject *parent) : QObject(parent)
     m_hash.insert("-", KEY_MINUS);
     m_hash.insert("Backspace", KEY_BACKSPACE);
     m_hash.insert("Esc", KEY_ESC);
+    m_hash.insert("Home", KEY_HOME);
+    m_hash.insert("End", KEY_END);
+    m_hash.insert("PgUp", KEY_PAGEUP);
+    m_hash.insert("PgDown", KEY_PAGEDOWN);
+    m_hash.insert("Return", KEY_ENTER);
 
     m_hash.insert("0", KEY_0);
     m_hash.insert("1", KEY_1);
