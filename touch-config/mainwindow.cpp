@@ -19,6 +19,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->tableWidget->setEnabled(m_settings->isWritable());
     ui->tableWidget_2->setEnabled(m_settings->isWritable());
+    ui->tableWidget_3->setEnabled(m_settings->isWritable());
+    ui->tableWidget_4->setEnabled(m_settings->isWritable());
 
     if (!m_settings->isWritable()) {
         QMessageBox::information(0, 0, tr("You have not premisson to change shortcut settings. \n"
@@ -102,6 +104,45 @@ MainWindow::MainWindow(QWidget *parent)
     }
     m_settings->endGroup();
 
+    m_settings->beginGroup("touchpad");
+
+    ui->tableWidget_3->setRowCount(2);
+    ui->tableWidget_3->setColumnCount(4);
+    ui->tableWidget_3->setVerticalHeaderLabels(QStringList()<<tr("3 Finger")<<tr("4 Finger"));
+    ui->tableWidget_3->setHorizontalHeaderLabels(QStringList()<<tr("Left")<<tr("Right")<<tr("Up")<<tr("Down"));
+
+    ui->tableWidget_4->setRowCount(2);
+    ui->tableWidget_4->setColumnCount(2);
+    ui->tableWidget_4->setVerticalHeaderLabels(QStringList()<<tr("3 Finger")<<tr("4 Finger"));
+    ui->tableWidget_4->setHorizontalHeaderLabels(QStringList()<<tr("Zoom In")<<tr("Zoom Out"));
+
+    for (int i = 3; i <= 4; i++) {
+        m_settings->beginGroup("Swipe");
+        m_settings->beginReadArray("Finished");
+        m_settings->setArrayIndex(i);
+        auto leftShortcut = m_settings->value("Left").toString();
+        auto rightShortcut = m_settings->value("Right").toString();
+        auto upShortcut = m_settings->value("Up").toString();
+        auto downShortcut = m_settings->value("Down").toString();
+        ui->tableWidget_3->setItem(i-3, 0, new QTableWidgetItem(leftShortcut));
+        ui->tableWidget_3->setItem(i-3, 1, new QTableWidgetItem(rightShortcut));
+        ui->tableWidget_3->setItem(i-3, 2, new QTableWidgetItem(upShortcut));
+        ui->tableWidget_3->setItem(i-3, 3, new QTableWidgetItem(downShortcut));
+        m_settings->endArray();
+        m_settings->endGroup();
+
+        m_settings->beginGroup("Pinch");
+        m_settings->beginReadArray("Finished");
+        m_settings->setArrayIndex(i);
+        auto zoomInShortcut = m_settings->value("ZoomIn").toString();
+        auto zoomOutShortcut = m_settings->value("ZoomOut").toString();
+        ui->tableWidget_4->setItem(i-3, 0, new QTableWidgetItem(zoomInShortcut));
+        ui->tableWidget_4->setItem(i-3, 1, new QTableWidgetItem(zoomOutShortcut));
+        m_settings->endArray();
+        m_settings->endGroup();
+    }
+    m_settings->endGroup();
+
     connect(ui->tableWidget, &QTableWidget::cellClicked, this, [=](int row, int column){
         qDebug()<<row<<column;
         auto item = ui->tableWidget->item(row, column);
@@ -167,6 +208,83 @@ MainWindow::MainWindow(QWidget *parent)
 
             m_settings->beginGroup("touch screen");
             m_settings->beginGroup("Zoom");
+
+            m_settings->beginWriteArray("Finished");
+            m_settings->setArrayIndex(row + 3);
+            m_settings->setValue(direction, shortcut);
+            m_settings->endArray();
+
+            m_settings->endGroup();
+            m_settings->endGroup();
+
+            m_settings->sync();
+        }
+    });
+
+    connect(ui->tableWidget_3, &QTableWidget::cellClicked, this, [=](int row, int column){
+        auto item = ui->tableWidget_3->item(row, column);
+        QKeySequence shortcut = QKeySequence(item->text());
+        ShortcutDialog dlg(shortcut);
+        if (dlg.exec()) {
+            auto shortcut = dlg.getKeySequence();
+            item->setText(shortcut.toString());
+
+            QString direction;
+            switch (column) {
+            case 0:
+                direction = "Left";
+                break;
+            case 1:
+                direction = "Right";
+                break;
+            case 2:
+                direction = "Up";
+                break;
+            case 3:
+                direction = "Down";
+                break;
+            default:
+                return;
+            }
+
+            m_settings->beginGroup("touchpad");
+            m_settings->beginGroup("Swipe");
+
+            m_settings->beginWriteArray("Finished");
+            m_settings->setArrayIndex(row + 3);
+            m_settings->setValue(direction, shortcut);
+            m_settings->endArray();
+
+            m_settings->endGroup();
+            m_settings->endGroup();
+
+            m_settings->sync();
+        }
+    });
+
+    connect(ui->tableWidget_4, &QTableWidget::cellClicked, this, [=](int row, int column){
+        auto item = ui->tableWidget_4->item(row, column);
+        QKeySequence shortcut = QKeySequence(item->text());
+
+        ShortcutDialog dlg(shortcut);
+        if (dlg.exec()) {
+            auto shortcut = dlg.getKeySequence();
+            item->setText(shortcut.toString());
+
+            QString direction;
+            switch (column) {
+            case 0:
+                direction = "ZoomIn";
+                break;
+            case 1:
+                direction = "ZoomOut";
+                break;
+            default:
+                return;
+            }
+
+            m_settings->beginGroup("touchpad");
+            m_settings->beginGroup("Pinch");
 
             m_settings->beginWriteArray("Finished");
             m_settings->setArrayIndex(row + 3);
