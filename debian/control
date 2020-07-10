@@ -22,7 +22,8 @@ Depends: ${misc:Depends},
          libinput10,
          libudev1,
          libqt5core5a,
-         libqt5gui5
+         libqt5gui5,
+         libkf5xmlgui5
 Description: A system service translating gesture to shortcut
  This package provides the service which can captrue touch event
  and translator them to keyboard shortcut or more.
