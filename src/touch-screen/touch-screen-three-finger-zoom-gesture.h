@@ -24,19 +24,19 @@ public:
 
     void cancel() override;
 
-    bool isCancelled() override {return m_is_cancelled;}
+    bool isCancelled() override {return m_isCancelled;}
 
 private:
-    int m_current_finger_count = 0;
+    int m_currentFingerCount = 0;
 
-    bool m_is_cancelled = false;
-    bool m_is_started = false;
+    bool m_isCancelled = false;
+    bool m_isStarted = false;
 
-    Direction m_last_direction = None;
+    Direction m_lastDirection = None;
 
-    QPointF m_start_points[3];
-    QPointF m_last_points[3];
-    QPointF m_current_points[3];
+    QPointF m_startPoints[3];
+    QPointF m_lastPoints[3];
+    QPointF m_currentPoints[3];
 };
 
 #endif // TOUCHSCREENTHREEFINGERZOOMGESTURE_H

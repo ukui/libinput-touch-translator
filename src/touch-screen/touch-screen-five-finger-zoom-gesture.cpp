@@ -10,7 +10,7 @@ TouchScreenGestureInterface::State TouchScreenFiveFingerZoomGesture::handleInput
     switch (libinput_event_get_type(event)) {
     case LIBINPUT_EVENT_TOUCH_DOWN: {
         m_current_finger_count++;
-        if (m_is_cancelled)
+        if (m_isCancelled)
             return Ignore;
         auto touch_event = libinput_event_get_touch_event(event);
 
@@ -22,32 +22,32 @@ TouchScreenGestureInterface::State TouchScreenFiveFingerZoomGesture::handleInput
         double mmy = libinput_event_touch_get_y(touch_event);
 
         if (current_finger_count <= 5) {
-            m_start_points[current_slot] = QPointF(mmx, mmy);
+            m_startPoints[current_slot] = QPointF(mmx, mmy);
         }
 
         if (current_finger_count == 5) {
             // start the gesture
-            m_is_started = true;
+            m_isStarted = true;
             for (int i = 0; i < 5; i++) {
-                m_last_points[i] = m_start_points[i];
-                m_current_points[i] = m_start_points[i];
+                m_lastPoints[i] = m_startPoints[i];
+                m_currentPoints[i] = m_startPoints[i];
             }
             emit gestureBegin(getGestureIndex());
             return Maybe;
         }
 
         if (current_finger_count > 5) {
-            m_is_cancelled = true;
+            m_isCancelled = true;
             emit gestureCancelled(getGestureIndex());
             return Cancelled;
         }
         break;
     }
     case LIBINPUT_EVENT_TOUCH_MOTION: {
-        if (m_is_cancelled)
+        if (m_isCancelled)
             return Ignore;
 
-        if (!m_is_started) {
+        if (!m_isStarted) {
             return Ignore;
         }
 
@@ -59,7 +59,7 @@ TouchScreenGestureInterface::State TouchScreenFiveFingerZoomGesture::handleInput
         double mmx = libinput_event_touch_get_x(touch_event);
         double mmy = libinput_event_touch_get_y(touch_event);
 
-        m_current_points[current_slot] = QPointF(mmx, mmy);
+        m_currentPoints[current_slot] = QPointF(mmx, mmy);
         break;
     }
     case LIBINPUT_EVENT_TOUCH_UP: {
@@ -67,7 +67,7 @@ TouchScreenGestureInterface::State TouchScreenFiveFingerZoomGesture::handleInput
         int current_finger_count = m_current_finger_count;
 
         if (current_finger_count <= 0) {
-            if (!m_is_cancelled && m_is_started && m_last_direction != None) {
+            if (!m_isCancelled && m_isStarted && m_lastDirection != None) {
                 emit gestureFinished(getGestureIndex());
                 //qDebug()<<"total direction:"<<totalDirection();
                 return Finished;
@@ -81,20 +81,20 @@ TouchScreenGestureInterface::State TouchScreenFiveFingerZoomGesture::handleInput
         break;
     }
     case LIBINPUT_EVENT_TOUCH_FRAME: {
-        if (m_is_cancelled || !m_is_started)
+        if (m_isCancelled || !m_isStarted)
             return Ignore;
 
         // update gesture
 
         // count offset
-        auto last_distance01 = (m_last_points[0] - m_last_points[1]).manhattanLength();
-        auto last_distance02 = (m_last_points[0] - m_last_points[2]).manhattanLength();
-        auto last_distance03 = (m_last_points[0] - m_last_points[3]).manhattanLength();
-        auto last_distance04 = (m_last_points[0] - m_last_points[4]).manhattanLength();
-        auto current_distance01 = (m_current_points[0] - m_current_points[1]).manhattanLength();
-        auto current_distance02 = (m_current_points[0] - m_current_points[2]).manhattanLength();
-        auto current_distance03 = (m_current_points[0] - m_current_points[3]).manhattanLength();
-        auto current_distance04 = (m_current_points[0] - m_current_points[4]).manhattanLength();
+        auto last_distance01 = (m_lastPoints[0] - m_lastPoints[1]).manhattanLength();
+        auto last_distance02 = (m_lastPoints[0] - m_lastPoints[2]).manhattanLength();
+        auto last_distance03 = (m_lastPoints[0] - m_lastPoints[3]).manhattanLength();
+        auto last_distance04 = (m_lastPoints[0] - m_lastPoints[4]).manhattanLength();
+        auto current_distance01 = (m_currentPoints[0] - m_currentPoints[1]).manhattanLength();
+        auto current_distance02 = (m_currentPoints[0] - m_currentPoints[2]).manhattanLength();
+        auto current_distance03 = (m_currentPoints[0] - m_currentPoints[3]).manhattanLength();
+        auto current_distance04 = (m_currentPoints[0] - m_currentPoints[4]).manhattanLength();
 
         auto last_distance = (last_distance01 + last_distance02 + last_distance03 + last_distance04)/4;
         auto current_distance = (current_distance01 + current_distance02 + current_distance03 + current_distance04)/4;
@@ -104,13 +104,13 @@ TouchScreenGestureInterface::State TouchScreenFiveFingerZoomGesture::handleInput
         }
 
         for (int i = 0; i < 5; i++) {
-            m_last_points[i] = m_current_points[i];
+            m_lastPoints[i] = m_currentPoints[i];
         }
 
         if (delta > 0) {
-            m_last_direction = ZoomIn;
+            m_lastDirection = ZoomIn;
         } else {
-            m_last_direction = ZoomOut;
+            m_lastDirection = ZoomOut;
         }
 
         emit gestureUpdate(getGestureIndex());
@@ -120,7 +120,7 @@ TouchScreenGestureInterface::State TouchScreenFiveFingerZoomGesture::handleInput
         break;
     }
     case LIBINPUT_EVENT_TOUCH_CANCEL: {
-        m_is_cancelled = true;
+        m_isCancelled = true;
         emit gestureCancelled(getGestureIndex());
         return Cancelled;
         break;
@@ -134,28 +134,28 @@ TouchScreenGestureInterface::State TouchScreenFiveFingerZoomGesture::handleInput
 
 void TouchScreenFiveFingerZoomGesture::reset()
 {
-    m_is_cancelled = false;
-    m_is_started = false;
-    m_last_direction = None;
+    m_isCancelled = false;
+    m_isStarted = false;
+    m_lastDirection = None;
 
     for (int i = 0; i < 5; i++) {
-        m_start_points[i] = QPointF();
-        m_last_points[i] = QPointF();
-        m_current_points[i] = QPointF();
+        m_startPoints[i] = QPointF();
+        m_lastPoints[i] = QPointF();
+        m_currentPoints[i] = QPointF();
     }
 }
 
 TouchScreenGestureInterface::Direction TouchScreenFiveFingerZoomGesture::totalDirection()
 {
     // count offset
-    auto start_distance01 = (m_start_points[0] - m_start_points[1]).manhattanLength();
-    auto start_distance02 = (m_start_points[0] - m_start_points[2]).manhattanLength();
-    auto start_distance03 = (m_start_points[0] - m_start_points[3]).manhattanLength();
-    auto start_distance04 = (m_start_points[0] - m_start_points[4]).manhattanLength();
-    auto current_distance01 = (m_current_points[0] - m_current_points[1]).manhattanLength();
-    auto current_distance02 = (m_current_points[0] - m_current_points[2]).manhattanLength();
-    auto current_distance03 = (m_current_points[0] - m_current_points[3]).manhattanLength();
-    auto current_distance04 = (m_current_points[0] - m_current_points[4]).manhattanLength();
+    auto start_distance01 = (m_startPoints[0] - m_startPoints[1]).manhattanLength();
+    auto start_distance02 = (m_startPoints[0] - m_startPoints[2]).manhattanLength();
+    auto start_distance03 = (m_startPoints[0] - m_startPoints[3]).manhattanLength();
+    auto start_distance04 = (m_startPoints[0] - m_startPoints[4]).manhattanLength();
+    auto current_distance01 = (m_currentPoints[0] - m_currentPoints[1]).manhattanLength();
+    auto current_distance02 = (m_currentPoints[0] - m_currentPoints[2]).manhattanLength();
+    auto current_distance03 = (m_currentPoints[0] - m_currentPoints[3]).manhattanLength();
+    auto current_distance04 = (m_currentPoints[0] - m_currentPoints[4]).manhattanLength();
 
     auto start_distance = (start_distance01 + start_distance02 + start_distance03 + start_distance04)/4;
     auto current_distance = (current_distance01 + current_distance02 + current_distance03 + current_distance04)/4;
@@ -172,7 +172,7 @@ TouchScreenGestureInterface::Direction TouchScreenFiveFingerZoomGesture::totalDi
 
 TouchScreenGestureInterface::Direction TouchScreenFiveFingerZoomGesture::lastDirection()
 {
-    return m_last_direction;
+    return m_lastDirection;
 }
 
 void TouchScreenFiveFingerZoomGesture::cancel()

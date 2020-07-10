@@ -32,7 +32,7 @@ signals:
 private:
     libinput *m_input;
 
-    TouchScreenGestureManager *m_touch_screen_gesture_manager = nullptr;
+    TouchScreenGestureManager *m_touchScreenGestureManager = nullptr;
 };
 
 #endif // EVENTMONITOR_H

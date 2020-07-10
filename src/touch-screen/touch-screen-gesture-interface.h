@@ -12,7 +12,8 @@ public:
     enum GestureType {
         Unknow,
         Swipe,
-        Zoom
+        Zoom,
+        Tap
     };
     Q_ENUM(GestureType)
 

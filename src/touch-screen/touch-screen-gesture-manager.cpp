@@ -74,11 +74,16 @@ void TouchScreenGestureManager::onGestureFinished(int index)
     auto gesture = m_gestures.at(index);
     qDebug()<<gesture->finger()<<"finger"<<gesture->type()<<"finished, total direction:"<<gesture->totalDirection();
 
-    auto settingsManager = SettingsManager::getManager();
-    auto shortCut = settingsManager->getShortCut(gesture, TouchScreenGestureInterface::Finished, gesture->totalDirection());
-    qDebug()<<shortCut;
+    if (gesture->type() == TouchScreenGestureInterface::Tap) {
+        if (gesture->finger() == 2)
+            UInputHelper::getInstance()->clickMouseRightButton();
+    } else {
+        auto settingsManager = SettingsManager::getManager();
+        auto shortCut = settingsManager->getShortCut(gesture, TouchScreenGestureInterface::Finished, gesture->totalDirection());
+        qDebug()<<shortCut;
 
-    UInputHelper::getInstance()->executeShortCut(shortCut);
+        UInputHelper::getInstance()->executeShortCut(shortCut);
+    }
 
     // reset all gesture
     for (auto gesture : m_gestures) {

@@ -42,6 +42,13 @@ void UInputHelper::executeShortCut(const QKeySequence &shortCut)
     }
 }
 
+void UInputHelper::clickMouseRightButton()
+{
+    qDebug()<<"mouse click";
+    report_key(EV_KEY, BTN_RIGHT, 1);
+    report_key(EV_KEY, BTN_RIGHT, 0);
+}
+
 QList<int> UInputHelper::parseShortcut(const QKeySequence &shortCut)
 {
     QList<int> keys;
@@ -163,6 +170,9 @@ int creat_user_uinput(void)
     ioctl(uinput_fd, UI_SET_EVBIT, EV_SYN);
     ioctl(uinput_fd, UI_SET_EVBIT, EV_KEY);
     ioctl(uinput_fd, UI_SET_EVBIT, EV_MSC);
+
+    // mouse right click
+    ioctl(uinput_fd, UI_SET_KEYBIT, BTN_RIGHT);
 
     for(i = 0; i < 256; i++){
         ioctl(uinput_fd, UI_SET_KEYBIT, i);

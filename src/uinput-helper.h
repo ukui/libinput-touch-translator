@@ -16,6 +16,7 @@ signals:
 
 public slots:
     void executeShortCut(const QKeySequence &shortCut);
+    void clickMouseRightButton();
 
 protected:
     QList<int> parseShortcut(const QKeySequence &shortCut);

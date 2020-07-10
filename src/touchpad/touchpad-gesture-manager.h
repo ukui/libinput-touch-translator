@@ -48,14 +48,14 @@ public slots:
 private:
     explicit TouchpadGestureManager(QObject *parent = nullptr);
 
-    int m_last_finger = 0;
-    bool m_is_cancelled = 0;
+    int m_lastFinger = 0;
+    bool m_isCancelled = 0;
 
-    double m_total_dxmm = 0;
-    double m_total_dymm = 0;
+    double m_totalDxmm = 0;
+    double m_totalDymm = 0;
 
-    double m_total_scale = 0;
-    double m_total_angle = 0;
+    double m_totalScale = 0;
+    double m_totalAngle = 0;
 };
 
 #endif // TOUCHPADGESTUREMANAGER_H

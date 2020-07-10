@@ -100,8 +100,8 @@ void EventMonitor::startMonitor()
                 case LIBINPUT_EVENT_TOUCH_FRAME:
                 case LIBINPUT_EVENT_TOUCH_CANCEL:
                     //printf("touch event %d\n", type);
-                    if (m_touch_screen_gesture_manager) {
-                        m_touch_screen_gesture_manager->processEvent(event);
+                    if (m_touchScreenGestureManager) {
+                        m_touchScreenGestureManager->processEvent(event);
                     }
                     break;
 
@@ -129,5 +129,5 @@ void EventMonitor::startMonitor()
 
 void EventMonitor::initTouchScreenGestureManager(TouchScreenGestureManager *manager)
 {
-    m_touch_screen_gesture_manager = manager;
+    m_touchScreenGestureManager = manager;
 }

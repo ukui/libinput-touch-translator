@@ -11,12 +11,12 @@ TouchScreenGestureInterface::State TouchScreenThreeFingerSwipeGesture::handleInp
 {
     switch (libinput_event_get_type(event)) {
     case LIBINPUT_EVENT_TOUCH_DOWN: {
-        m_current_finger_count++;
-        if (m_is_cancelled)
+        m_currentFingerCount++;
+        if (m_isCancelled)
             return Ignore;
         auto touch_event = libinput_event_get_touch_event(event);
 
-        int current_finger_count = m_current_finger_count;
+        int current_finger_count = m_currentFingerCount;
         //qDebug()<<"current finger count:"<<current_finger_count;
         int current_slot = libinput_event_touch_get_slot(touch_event);
 
@@ -24,32 +24,32 @@ TouchScreenGestureInterface::State TouchScreenThreeFingerSwipeGesture::handleInp
         double mmy = libinput_event_touch_get_y(touch_event);
 
         if (current_finger_count <= 3) {
-            m_start_points[current_slot] = QPointF(mmx, mmy);
+            m_startPoints[current_slot] = QPointF(mmx, mmy);
         }
 
         if (current_finger_count == 3) {
             // start the gesture
-            m_is_started = true;
+            m_isStarted = true;
             for (int i = 0; i < 3; i++) {
-                m_last_points[i] = m_start_points[i];
-                m_current_points[i] = m_start_points[i];
+                m_lastPoints[i] = m_startPoints[i];
+                m_currentPoints[i] = m_startPoints[i];
             }
             emit gestureBegin(getGestureIndex());
             return Maybe;
         }
 
         if (current_finger_count > 3) {
-            m_is_cancelled = true;
+            m_isCancelled = true;
             emit gestureCancelled(getGestureIndex());
             return Cancelled;
         }
         break;
     }
     case LIBINPUT_EVENT_TOUCH_MOTION: {
-        if (m_is_cancelled)
+        if (m_isCancelled)
             return Ignore;
 
-        if (!m_is_started) {
+        if (!m_isStarted) {
             return Ignore;
         }
 
@@ -61,15 +61,15 @@ TouchScreenGestureInterface::State TouchScreenThreeFingerSwipeGesture::handleInp
         double mmx = libinput_event_touch_get_x(touch_event);
         double mmy = libinput_event_touch_get_y(touch_event);
 
-        m_current_points[current_slot] = QPointF(mmx, mmy);
+        m_currentPoints[current_slot] = QPointF(mmx, mmy);
         break;
     }
     case LIBINPUT_EVENT_TOUCH_UP: {
-        m_current_finger_count--;
-        int current_finger_count = m_current_finger_count;
+        m_currentFingerCount--;
+        int current_finger_count = m_currentFingerCount;
 
         if (current_finger_count <= 0) {
-            if (!m_is_cancelled && m_is_started && m_last_direction != None) {
+            if (!m_isCancelled && m_isStarted && m_lastDirection != None) {
                 emit gestureFinished(getGestureIndex());
                 //qDebug()<<"total direction:"<<totalDirection();
                 return Finished;
@@ -83,14 +83,14 @@ TouchScreenGestureInterface::State TouchScreenThreeFingerSwipeGesture::handleInp
         break;
     }
     case LIBINPUT_EVENT_TOUCH_FRAME: {
-        if (m_is_cancelled || !m_is_started)
+        if (m_isCancelled || !m_isStarted)
             return Ignore;
 
         // update gesture
 
         // count offset
-        auto last_center_points = (m_last_points[0] + m_last_points[1] + m_last_points[2])/3;
-        auto current_center_points = (m_current_points[0] + m_current_points[1] + m_current_points[2])/3;
+        auto last_center_points = (m_lastPoints[0] + m_lastPoints[1] + m_lastPoints[2])/3;
+        auto current_center_points = (m_currentPoints[0] + m_currentPoints[1] + m_currentPoints[2])/3;
         auto delta = current_center_points - last_center_points;
         auto offset = delta.manhattanLength();
         if (offset < 20) {
@@ -98,13 +98,13 @@ TouchScreenGestureInterface::State TouchScreenThreeFingerSwipeGesture::handleInp
         }
 
         for (int i = 0; i < 3; i++) {
-            m_last_points[i] = m_current_points[i];
+            m_lastPoints[i] = m_currentPoints[i];
         }
 
         if (qAbs(delta.x()) > qAbs(delta.y())) {
-            m_last_direction = delta.x() > 0? Right: Left;
+            m_lastDirection = delta.x() > 0? Right: Left;
         } else {
-            m_last_direction = delta.y() > 0? Down: Up;
+            m_lastDirection = delta.y() > 0? Down: Up;
         }
 
         emit gestureUpdate(getGestureIndex());
@@ -114,7 +114,7 @@ TouchScreenGestureInterface::State TouchScreenThreeFingerSwipeGesture::handleInp
         break;
     }
     case LIBINPUT_EVENT_TOUCH_CANCEL: {
-        m_is_cancelled = true;
+        m_isCancelled = true;
         emit gestureCancelled(getGestureIndex());
         return Cancelled;
         break;
@@ -128,22 +128,22 @@ TouchScreenGestureInterface::State TouchScreenThreeFingerSwipeGesture::handleInp
 
 void TouchScreenThreeFingerSwipeGesture::reset()
 {
-    m_is_cancelled = false;
-    m_is_started = false;
-    m_last_direction = None;
+    m_isCancelled = false;
+    m_isStarted = false;
+    m_lastDirection = None;
 
     for (int i = 0; i < 3; i++) {
-        m_start_points[i] = QPointF();
-        m_last_points[i] = QPointF();
-        m_current_points[i] = QPointF();
+        m_startPoints[i] = QPointF();
+        m_lastPoints[i] = QPointF();
+        m_currentPoints[i] = QPointF();
     }
 }
 
 TouchScreenGestureInterface::Direction TouchScreenThreeFingerSwipeGesture::totalDirection()
 {
     // count total offset
-    auto start_center_points = (m_start_points[0] + m_start_points[1] + m_start_points[2])/3;
-    auto current_center_points = (m_current_points[0] + m_current_points[1] + m_current_points[2])/3;
+    auto start_center_points = (m_startPoints[0] + m_startPoints[1] + m_startPoints[2])/3;
+    auto current_center_points = (m_currentPoints[0] + m_currentPoints[1] + m_currentPoints[2])/3;
     auto delta = current_center_points - start_center_points;
     auto offset = delta.manhattanLength();
     if (offset < 20) {
@@ -159,11 +159,11 @@ TouchScreenGestureInterface::Direction TouchScreenThreeFingerSwipeGesture::total
 
 TouchScreenGestureInterface::Direction TouchScreenThreeFingerSwipeGesture::lastDirection()
 {
-    return m_last_direction;
+    return m_lastDirection;
 }
 
 void TouchScreenThreeFingerSwipeGesture::cancel()
 {
-    m_is_cancelled = true;
+    m_isCancelled = true;
     emit gestureCancelled(getGestureIndex());
 }
