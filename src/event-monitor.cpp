@@ -1,6 +1,7 @@
 #include "event-monitor.h"
 
 #include "touch-screen/touch-screen-gesture-manager.h"
+#include "touchpad/touchpad-gesture-manager.h"
 
 #include <libudev.h>
 #include <linux/uinput.h>
@@ -103,6 +104,16 @@ void EventMonitor::startMonitor()
                         m_touch_screen_gesture_manager->processEvent(event);
                     }
                     break;
+
+                case LIBINPUT_EVENT_GESTURE_SWIPE_BEGIN:
+                case LIBINPUT_EVENT_GESTURE_SWIPE_UPDATE:
+                case LIBINPUT_EVENT_GESTURE_SWIPE_END:
+                case LIBINPUT_EVENT_GESTURE_PINCH_BEGIN:
+                case LIBINPUT_EVENT_GESTURE_PINCH_UPDATE:
+                case LIBINPUT_EVENT_GESTURE_PINCH_END: {
+                    TouchpadGestureManager::getManager()->processEvent(event);
+                    break;
+                }
                 default:
                     //printf("other event %d\n", type);
                     break;

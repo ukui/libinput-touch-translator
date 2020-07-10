@@ -19,6 +19,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 include(touch-screen/touch-screen.pri)
+include(touchpad/touchpad.pri)
 
 SOURCES += \
         event-monitor.cpp \

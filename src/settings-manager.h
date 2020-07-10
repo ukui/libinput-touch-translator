@@ -5,8 +5,8 @@
 #include <QKeySequence>
 
 #include <QMetaEnum>
-
 #include "touch-screen/touch-screen-gesture-interface.h"
+#include "touchpad/touchpad-gesture-manager.h"
 
 class TouchScreenGestureInterface;
 class QSettings;
@@ -20,6 +20,11 @@ public:
     QKeySequence getShortCut(TouchScreenGestureInterface *gesture,
                              TouchScreenGestureInterface::State state,
                              TouchScreenGestureInterface::Direction direction);
+
+    QKeySequence gesShortCut(int fingerCount,
+                             TouchpadGestureManager::GestureType type,
+                             TouchpadGestureManager::State state,
+                             TouchpadGestureManager::Direction direction);
 
 signals:
 
@@ -37,6 +42,10 @@ private:
     QMetaEnum m_touchScreenGestureType;
     QMetaEnum m_touchScreenGestureState;
     QMetaEnum m_touchScreenGestureDirection;
+
+    QMetaEnum m_touchpadGestureType;
+    QMetaEnum m_touchpadGestureState;
+    QMetaEnum m_touchpadGestureDirection;
 };
 
 #endif // SETTINGSMANAGER_H
