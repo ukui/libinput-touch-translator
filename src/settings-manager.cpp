@@ -33,90 +33,40 @@ SettingsManager::SettingsManager(QObject *parent) : QObject(parent)
         watcher->addPath(m_settings->fileName());
     });
 
-    m_settings->beginGroup("touch screen");
-    if (m_settings->childGroups().isEmpty()) {
-        // swipe group
-        m_settings->beginGroup(gestureType.valueToKey(TouchScreenGestureInterface::GestureType::Swipe));
-        m_settings->beginWriteArray(gestureState.valueToKey(TouchScreenGestureInterface::Finished));
+    setToucScreenShortCut(TouchScreenGestureInterface::Swipe, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::Left, 3, QKeySequence("Alt+Left"));
+    setToucScreenShortCut(TouchScreenGestureInterface::Swipe, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::Right, 3, QKeySequence("Alt+Right"));
+    setToucScreenShortCut(TouchScreenGestureInterface::Swipe, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::Up, 3, QKeySequence("Ctrl+End"));
+    setToucScreenShortCut(TouchScreenGestureInterface::Swipe, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::Down, 3, QKeySequence("Ctrl+Home"));
+    setToucScreenShortCut(TouchScreenGestureInterface::Swipe, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::Left, 4, QKeySequence("Shift+Alt+Tab"));
+    setToucScreenShortCut(TouchScreenGestureInterface::Swipe, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::Right, 4, QKeySequence("Alt+Tab"));
+    setToucScreenShortCut(TouchScreenGestureInterface::Swipe, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::Up, 4, QKeySequence("Ctrl+End"));
+    setToucScreenShortCut(TouchScreenGestureInterface::Swipe, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::Down, 4, QKeySequence("Ctrl+Home"));
+    setToucScreenShortCut(TouchScreenGestureInterface::Swipe, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::Left, 5, QKeySequence("Ctrl+Alt+Left"));
+    setToucScreenShortCut(TouchScreenGestureInterface::Swipe, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::Right, 5, QKeySequence("Ctrl+Alt+Right"));
+    setToucScreenShortCut(TouchScreenGestureInterface::Swipe, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::Up, 5, QKeySequence("Ctrl+End"));
+    setToucScreenShortCut(TouchScreenGestureInterface::Swipe, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::Down, 5, QKeySequence("Ctrl+Home"));
 
-        m_settings->setArrayIndex(3);
-        auto left = direction.valueToKey(TouchScreenGestureInterface::Direction::Left);
-        m_settings->setValue(left, QKeySequence("Alt+Left"));
-        auto right = direction.valueToKey(TouchScreenGestureInterface::Direction::Right);
-        m_settings->setValue(right, QKeySequence("Alt+Right"));
+    setToucScreenShortCut(TouchScreenGestureInterface::Zoom, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::ZoomIn, 3, QKeySequence("Ctrl+="));
+    setToucScreenShortCut(TouchScreenGestureInterface::Zoom, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::ZoomOut, 3, QKeySequence("Ctrl+-"));
+    setToucScreenShortCut(TouchScreenGestureInterface::Zoom, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::ZoomIn, 4, QKeySequence("F11"));
+    setToucScreenShortCut(TouchScreenGestureInterface::Zoom, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::ZoomOut, 4, QKeySequence("F11"));
+    setToucScreenShortCut(TouchScreenGestureInterface::Zoom, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::ZoomIn, 5, QKeySequence("F11"));
+    setToucScreenShortCut(TouchScreenGestureInterface::Zoom, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::ZoomOut, 5, QKeySequence("F11"));
 
-        m_settings->setArrayIndex(4);
-        m_settings->setValue(left, QKeySequence("Alt+Shift+Tab"));
-        m_settings->setValue(right, QKeySequence("Alt+Tab"));
+    setTouchPadShortCut(TouchpadGestureManager::Swipe, TouchpadGestureManager::Finished, TouchpadGestureManager::Left, 3, QKeySequence("Alt+Left"));
+    setTouchPadShortCut(TouchpadGestureManager::Swipe, TouchpadGestureManager::Finished, TouchpadGestureManager::Right, 3, QKeySequence("Alt+Right"));
+    setTouchPadShortCut(TouchpadGestureManager::Swipe, TouchpadGestureManager::Finished, TouchpadGestureManager::Up, 3, QKeySequence("Ctrl+End"));
+    setTouchPadShortCut(TouchpadGestureManager::Swipe, TouchpadGestureManager::Finished, TouchpadGestureManager::Down, 3, QKeySequence("Ctrl+Home"));
+    setTouchPadShortCut(TouchpadGestureManager::Swipe, TouchpadGestureManager::Finished, TouchpadGestureManager::Left, 4, QKeySequence("Shift+Alt+Tab"));
+    setTouchPadShortCut(TouchpadGestureManager::Swipe, TouchpadGestureManager::Finished, TouchpadGestureManager::Right, 4, QKeySequence("Alt+Tab"));
+    setTouchPadShortCut(TouchpadGestureManager::Swipe, TouchpadGestureManager::Finished, TouchpadGestureManager::Up, 4, QKeySequence("Ctrl+Shift+Left"));
+    setTouchPadShortCut(TouchpadGestureManager::Swipe, TouchpadGestureManager::Finished, TouchpadGestureManager::Down, 4, QKeySequence("Ctrl+Shift+Right"));
 
-        m_settings->setArrayIndex(5);
-        m_settings->setValue(left, QKeySequence("Ctrl+Alt+Left"));
-        m_settings->setValue(right, QKeySequence("Ctrl+Alt+Right"));
+    setTouchPadShortCut(TouchpadGestureManager::Pinch, TouchpadGestureManager::Finished, TouchpadGestureManager::ZoomIn, 3, QKeySequence("Ctrl+="));
+    setTouchPadShortCut(TouchpadGestureManager::Pinch, TouchpadGestureManager::Finished, TouchpadGestureManager::ZoomOut, 3, QKeySequence("Ctrl+-"));
+    setTouchPadShortCut(TouchpadGestureManager::Pinch, TouchpadGestureManager::Finished, TouchpadGestureManager::ZoomIn, 4, QKeySequence("F11"));
+    setTouchPadShortCut(TouchpadGestureManager::Pinch, TouchpadGestureManager::Finished, TouchpadGestureManager::ZoomOut, 4, QKeySequence("F11"));
 
-        m_settings->endArray();
-
-        m_settings->endGroup();
-
-        // zoom group
-        m_settings->beginGroup(gestureType.valueToKey(TouchScreenGestureInterface::GestureType::Zoom));
-        m_settings->beginWriteArray(gestureState.valueToKey(TouchScreenGestureInterface::Finished));
-
-        m_settings->setArrayIndex(3);
-        auto zoomIn = direction.valueToKey(TouchScreenGestureInterface::Direction::ZoomIn);
-        m_settings->setValue(zoomIn, QKeySequence("Ctrl+="));
-        auto zoomOut = direction.valueToKey(TouchScreenGestureInterface::Direction::ZoomOut);
-        m_settings->setValue(zoomOut, QKeySequence("Ctrl+-"));
-
-        m_settings->setArrayIndex(4);
-        m_settings->setValue(zoomIn, QKeySequence("F11"));
-        m_settings->setValue(zoomOut, QKeySequence("F11"));
-
-        m_settings->setArrayIndex(5);
-        m_settings->setValue(zoomIn, QKeySequence("F11"));
-        m_settings->setValue(zoomOut, QKeySequence("F11"));
-
-        m_settings->endArray();
-
-        m_settings->endGroup();
-    }
-    m_settings->endGroup();
-
-    m_settings->beginGroup("touchpad");
-    if (m_settings->childGroups().isEmpty()) {
-        // swipe
-        m_settings->beginGroup(m_touchpadGestureType.valueToKey(TouchpadGestureManager::Swipe));
-        m_settings->beginWriteArray(m_touchpadGestureState.valueToKey(TouchpadGestureManager::Finished));
-        m_settings->setArrayIndex(3);
-        auto left = m_touchpadGestureDirection.valueToKey(TouchpadGestureManager::Left);
-        auto right = m_touchpadGestureDirection.valueToKey(TouchpadGestureManager::Right);
-        m_settings->setValue(left, QKeySequence("Alt+Left"));
-        m_settings->setValue(right, QKeySequence("Alt+Right"));
-
-        m_settings->setArrayIndex(4);
-        m_settings->setValue(left, QKeySequence("Shift+Alt+Tab"));
-        m_settings->setValue(right, QKeySequence("Alt+Tab"));
-        m_settings->endArray();
-        m_settings->endGroup();
-
-        // pinch
-        m_settings->beginGroup(m_touchpadGestureType.valueToKey(TouchpadGestureManager::Pinch));
-        m_settings->beginWriteArray(m_touchpadGestureState.key(TouchpadGestureManager::Finished));
-
-        auto zoomIn = m_touchpadGestureDirection.valueToKey(TouchpadGestureManager::ZoomIn);
-        auto zoomOut = m_touchpadGestureDirection.valueToKey(TouchpadGestureManager::ZoomOut);
-
-        m_settings->setArrayIndex(3);
-        m_settings->setValue(zoomIn, QKeySequence("F11"));
-        m_settings->setValue(zoomOut, QKeySequence("F11"));
-
-        m_settings->setArrayIndex(4);
-        m_settings->setValue(zoomIn, QKeySequence("F11"));
-        m_settings->setValue(zoomOut, QKeySequence("F11"));
-
-        m_settings->endArray();
-        m_settings->endGroup();
-    }
-    m_settings->endGroup();
     m_settings->sync();
 }
 
@@ -156,7 +106,7 @@ QKeySequence SettingsManager::gesShortCut(int fingerCount, TouchpadGestureManage
     return shortcut;
 }
 
-void SettingsManager::setShortCut(TouchScreenGestureInterface::GestureType type, TouchScreenGestureInterface::State state, TouchScreenGestureInterface::Direction direction, int fingerCount, QKeySequence shortCut)
+void SettingsManager::setToucScreenShortCut(TouchScreenGestureInterface::GestureType type, TouchScreenGestureInterface::State state, TouchScreenGestureInterface::Direction direction, int fingerCount, QKeySequence shortCut)
 {
     m_settings->beginGroup("touch screen");
     m_settings->beginGroup(m_touchScreenGestureType.valueToKey(type));
@@ -166,5 +116,18 @@ void SettingsManager::setShortCut(TouchScreenGestureInterface::GestureType type,
     m_settings->endArray();
     m_settings->endGroup();
     m_settings->endGroup();
-    m_settings->sync();
+    //m_settings->sync();
+}
+
+void SettingsManager::setTouchPadShortCut(TouchpadGestureManager::GestureType type, TouchpadGestureManager::State state, TouchpadGestureManager::Direction direction, int fingerCount, QKeySequence shortCut)
+{
+    m_settings->beginGroup("touchpad");
+    m_settings->beginGroup(m_touchpadGestureType.valueToKey(type));
+    m_settings->beginWriteArray(m_touchpadGestureState.valueToKey(state));
+    m_settings->setArrayIndex(fingerCount);
+    m_settings->setValue(m_touchpadGestureDirection.valueToKey(direction), shortCut);
+    m_settings->endArray();
+    m_settings->endGroup();
+    m_settings->endGroup();
+    //m_settings->sync();
 }

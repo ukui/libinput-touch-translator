@@ -29,11 +29,17 @@ public:
 signals:
 
 public slots:
-    void setShortCut(TouchScreenGestureInterface::GestureType type,
-                     TouchScreenGestureInterface::State state,
-                     TouchScreenGestureInterface::Direction direction,
-                     int fingerCount,
-                     QKeySequence shortCut);
+    void setToucScreenShortCut(TouchScreenGestureInterface::GestureType type,
+                               TouchScreenGestureInterface::State state,
+                               TouchScreenGestureInterface::Direction direction,
+                               int fingerCount,
+                               QKeySequence shortCut);
+
+    void setTouchPadShortCut (TouchpadGestureManager::GestureType type,
+                              TouchpadGestureManager::State state,
+                              TouchpadGestureManager::Direction direction,
+                              int fingerCount,
+                              QKeySequence shortCut);
 
 private:
     explicit SettingsManager(QObject *parent = nullptr);
