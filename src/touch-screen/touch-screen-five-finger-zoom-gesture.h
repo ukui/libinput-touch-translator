@@ -49,7 +49,7 @@ public:
     bool isCancelled() override {return m_isCancelled;}
 
 private:
-    int m_current_finger_count = 0;
+    int m_currentFingerCount = 0;
 
     bool m_isCancelled = false;
     bool m_isStarted = false;

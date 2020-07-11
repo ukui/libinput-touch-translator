@@ -39,6 +39,7 @@ public:
     int queryGestureIndex(TouchScreenGestureInterface *gesture);
 
     void processEvent(libinput_event *event);
+    void forceReset();
 signals:
 
 public slots:

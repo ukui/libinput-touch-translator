@@ -66,6 +66,13 @@ void TouchScreenGestureManager::processEvent(libinput_event *event)
     }
 }
 
+void TouchScreenGestureManager::forceReset()
+{
+    for (auto gesture : m_gestures) {
+        gesture->reset();
+    }
+}
+
 void TouchScreenGestureManager::onGestureBegin(int index)
 {
 

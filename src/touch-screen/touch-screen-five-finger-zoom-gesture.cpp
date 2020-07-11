@@ -31,12 +31,12 @@ TouchScreenGestureInterface::State TouchScreenFiveFingerZoomGesture::handleInput
 {
     switch (libinput_event_get_type(event)) {
     case LIBINPUT_EVENT_TOUCH_DOWN: {
-        m_current_finger_count++;
+        m_currentFingerCount++;
         if (m_isCancelled)
             return Ignore;
         auto touch_event = libinput_event_get_touch_event(event);
 
-        int current_finger_count = m_current_finger_count;
+        int current_finger_count = m_currentFingerCount;
         //qDebug()<<"current finger count:"<<current_finger_count;
         int current_slot = libinput_event_touch_get_slot(touch_event);
 
@@ -69,10 +69,6 @@ TouchScreenGestureInterface::State TouchScreenFiveFingerZoomGesture::handleInput
         if (m_isCancelled)
             return Ignore;
 
-        if (!m_isStarted) {
-            return Ignore;
-        }
-
         // update position
         auto touch_event = libinput_event_get_touch_event(event);
 
@@ -82,11 +78,16 @@ TouchScreenGestureInterface::State TouchScreenFiveFingerZoomGesture::handleInput
         double mmy = libinput_event_touch_get_y(touch_event);
 
         m_currentPoints[current_slot] = QPointF(mmx, mmy);
+
+        if (!m_isStarted) {
+            m_startPoints[current_slot] = m_currentPoints[current_slot];
+        }
         break;
     }
     case LIBINPUT_EVENT_TOUCH_UP: {
-        m_current_finger_count--;
-        int current_finger_count = m_current_finger_count;
+        m_currentFingerCount--;
+        //m_isCancelled = true;
+        int current_finger_count = m_currentFingerCount;
 
         if (current_finger_count <= 0) {
             if (!m_isCancelled && m_isStarted && m_lastDirection != None) {
@@ -104,6 +105,9 @@ TouchScreenGestureInterface::State TouchScreenFiveFingerZoomGesture::handleInput
     }
     case LIBINPUT_EVENT_TOUCH_FRAME: {
         if (m_isCancelled || !m_isStarted)
+            return Ignore;
+
+        if (m_currentFingerCount != 5)
             return Ignore;
 
         // update gesture

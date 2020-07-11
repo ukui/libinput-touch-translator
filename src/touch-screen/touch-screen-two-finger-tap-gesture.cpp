@@ -82,7 +82,7 @@ TouchScreenGestureInterface::State TouchScreenTwoFingerTapGesture::handleInputEv
         auto delta0 = (m_currentPoints[0] - m_startPoints[0]).manhattanLength();
         auto delta1 = (m_currentPoints[1] - m_startPoints[1]).manhattanLength();
         if (delta0 > 10 || delta1 > 10) {
-            m_isCancelled = true;
+            //m_isCancelled = true;
             gestureCancelled(getGestureIndex());
             return Cancelled;
         }

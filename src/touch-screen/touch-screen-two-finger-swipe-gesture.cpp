@@ -1,5 +1,7 @@
 #include "touch-screen-two-finger-swipe-gesture.h"
 
+//#include <QDebug>
+
 TouchScreenTwoFingerSwipeGesture::TouchScreenTwoFingerSwipeGesture(QObject *parent)
 {
 
@@ -31,6 +33,7 @@ TouchScreenGestureInterface::State TouchScreenTwoFingerSwipeGesture::handleInput
             for (int i = 0; i < 2; i++) {
                 m_lastPoints[i] = m_startPoints[i];
                 m_currentPoints[i] = m_startPoints[i];
+                //qDebug()<<m_startPoints[i]<<m_currentPoints[i];
             }
             emit gestureBegin(getGestureIndex());
             return Maybe;
@@ -47,10 +50,6 @@ TouchScreenGestureInterface::State TouchScreenTwoFingerSwipeGesture::handleInput
         if (m_isCancelled)
             return Ignore;
 
-        if (!m_isStarted) {
-            return Ignore;
-        }
-
         // update position
         auto touch_event = libinput_event_get_touch_event(event);
 
@@ -60,10 +59,18 @@ TouchScreenGestureInterface::State TouchScreenTwoFingerSwipeGesture::handleInput
         double mmy = libinput_event_touch_get_y(touch_event);
 
         m_currentPoints[current_slot] = QPointF(mmx, mmy);
+
+        if (!m_isStarted) {
+            m_startPoints[current_slot] = m_currentPoints[current_slot];
+        } else {
+            //qDebug()<<"motion"<<m_startPoints[0]<<m_currentPoints[0];
+        }
+
         break;
     }
     case LIBINPUT_EVENT_TOUCH_UP: {
         m_currentFingerCount--;
+        //m_isCancelled = true;
         int current_finger_count = m_currentFingerCount;
 
         if (current_finger_count <= 0) {
@@ -84,6 +91,9 @@ TouchScreenGestureInterface::State TouchScreenTwoFingerSwipeGesture::handleInput
         if (m_isCancelled || !m_isStarted)
             return Ignore;
 
+        if (m_currentFingerCount != 2)
+            return Ignore;
+
         // update gesture
 
         // count offset
@@ -91,6 +101,9 @@ TouchScreenGestureInterface::State TouchScreenTwoFingerSwipeGesture::handleInput
         auto current_center_points = (m_currentPoints[0] + m_currentPoints[1])/2;
         auto delta = current_center_points - last_center_points;
         auto offset = delta.manhattanLength();
+
+        //qDebug()<<"offset"<<offset;
+
         if (offset < 20) {
             return Ignore;
         }

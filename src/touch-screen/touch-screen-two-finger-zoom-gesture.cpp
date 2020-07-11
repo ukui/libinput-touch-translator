@@ -47,10 +47,6 @@ TouchScreenGestureInterface::State TouchScreenTwoFingerZoomGesture::handleInputE
         if (m_isCancelled)
             return Ignore;
 
-        if (!m_isStarted) {
-            return Ignore;
-        }
-
         // update position
         auto touch_event = libinput_event_get_touch_event(event);
 
@@ -60,10 +56,15 @@ TouchScreenGestureInterface::State TouchScreenTwoFingerZoomGesture::handleInputE
         double mmy = libinput_event_touch_get_y(touch_event);
 
         m_currentPoints[current_slot] = QPointF(mmx, mmy);
+
+        if (!m_isStarted) {
+            m_startPoints[current_slot] = m_currentPoints[current_slot];
+        }
         break;
     }
     case LIBINPUT_EVENT_TOUCH_UP: {
         m_currentFingerCount--;
+        //m_isCancelled = true;
         int current_finger_count = m_currentFingerCount;
 
         if (current_finger_count <= 0) {
@@ -82,6 +83,9 @@ TouchScreenGestureInterface::State TouchScreenTwoFingerZoomGesture::handleInputE
     }
     case LIBINPUT_EVENT_TOUCH_FRAME: {
         if (m_isCancelled || !m_isStarted)
+            return Ignore;
+
+        if (m_currentFingerCount != 2)
             return Ignore;
 
         // update gesture
