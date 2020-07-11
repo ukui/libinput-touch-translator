@@ -1,11 +1,11 @@
-#include "touch-screen-two-finger-swipe-gesture.h"
+#include "touch-screen-two-finger-zoom-gesture.h"
 
-TouchScreenTwoFingerSwipeGesture::TouchScreenTwoFingerSwipeGesture(QObject *parent)
+TouchScreenTwoFingerZoomGesture::TouchScreenTwoFingerZoomGesture(QObject *parent) : TouchScreenGestureInterface(parent)
 {
 
 }
 
-TouchScreenGestureInterface::State TouchScreenTwoFingerSwipeGesture::handleInputEvent(libinput_event *event)
+TouchScreenGestureInterface::State TouchScreenTwoFingerZoomGesture::handleInputEvent(libinput_event *event)
 {
     switch (libinput_event_get_type(event)) {
     case LIBINPUT_EVENT_TOUCH_DOWN: {
@@ -87,11 +87,10 @@ TouchScreenGestureInterface::State TouchScreenTwoFingerSwipeGesture::handleInput
         // update gesture
 
         // count offset
-        auto last_center_points = (m_lastPoints[0] + m_lastPoints[1])/2;
-        auto current_center_points = (m_currentPoints[0] + m_currentPoints[1])/2;
-        auto delta = current_center_points - last_center_points;
-        auto offset = delta.manhattanLength();
-        if (offset < 20) {
+        auto last_distance = (m_lastPoints[0] - m_lastPoints[1]).manhattanLength();
+        auto current_distance = (m_currentPoints[0] - m_currentPoints[1]).manhattanLength();
+        auto delta = current_distance - last_distance;
+        if (qAbs(delta) < 15) {
             return Ignore;
         }
 
@@ -99,10 +98,10 @@ TouchScreenGestureInterface::State TouchScreenTwoFingerSwipeGesture::handleInput
             m_lastPoints[i] = m_currentPoints[i];
         }
 
-        if (qAbs(delta.x()) > qAbs(delta.y())) {
-            m_lastDirection = delta.x() > 0? Right: Left;
+        if (delta > 0) {
+            m_lastDirection = ZoomIn;
         } else {
-            m_lastDirection = delta.y() > 0? Down: Up;
+            m_lastDirection = ZoomOut;
         }
 
         emit gestureUpdate(getGestureIndex());
@@ -124,7 +123,7 @@ TouchScreenGestureInterface::State TouchScreenTwoFingerSwipeGesture::handleInput
     return Ignore;
 }
 
-void TouchScreenTwoFingerSwipeGesture::reset()
+void TouchScreenTwoFingerZoomGesture::reset()
 {
     m_isCancelled = false;
     m_isStarted = false;
@@ -137,31 +136,28 @@ void TouchScreenTwoFingerSwipeGesture::reset()
     }
 }
 
-TouchScreenGestureInterface::Direction TouchScreenTwoFingerSwipeGesture::totalDirection()
+TouchScreenGestureInterface::Direction TouchScreenTwoFingerZoomGesture::totalDirection()
 {
-    // count total offset
-    auto start_center_points = (m_startPoints[0] + m_startPoints[1])/2;
-    auto current_center_points = (m_currentPoints[0] + m_currentPoints[1])/2;
-    auto delta = current_center_points - start_center_points;
-    auto offset = delta.manhattanLength();
-    if (offset < 20) {
-        return None;
+    // count offset
+    auto start_distance = (m_startPoints[0] - m_startPoints[1]).manhattanLength();
+    auto current_distance = (m_currentPoints[0] - m_currentPoints[1]).manhattanLength();
+    auto delta = current_distance - start_distance;
+
+    if (delta > 15) {
+        return ZoomIn;
+    } else if (delta < -15) {
+        return ZoomOut;
     }
 
-    if (qAbs(delta.x()) > qAbs(delta.y())) {
-        return delta.x() > 0? Right: Left;
-    } else {
-        return delta.y() > 0? Down: Up;
-    }
+    return None;
 }
 
-TouchScreenGestureInterface::Direction TouchScreenTwoFingerSwipeGesture::lastDirection()
+TouchScreenGestureInterface::Direction TouchScreenTwoFingerZoomGesture::lastDirection()
 {
     return m_lastDirection;
 }
 
-void TouchScreenTwoFingerSwipeGesture::cancel()
+void TouchScreenTwoFingerZoomGesture::cancel()
 {
-    m_isCancelled = true;
-    emit gestureCancelled(getGestureIndex());
+
 }

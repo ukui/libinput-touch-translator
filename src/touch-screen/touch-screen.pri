@@ -8,7 +8,8 @@ HEADERS += \
     $$PWD/touch-screen-three-finger-swipe-gesture.h \
     $$PWD/touch-screen-three-finger-zoom-gesture.h \
     $$PWD/touch-screen-two-finger-swipe-gesture.h \
-    $$PWD/touch-screen-two-finger-tap-gesture.h
+    $$PWD/touch-screen-two-finger-tap-gesture.h \
+    $$PWD/touch-screen-two-finger-zoom-gesture.h
 
 SOURCES += \
     $$PWD/touch-screen-five-finger-swipe-gesture.cpp \
@@ -20,4 +21,5 @@ SOURCES += \
     $$PWD/touch-screen-three-finger-swipe-gesture.cpp \
     $$PWD/touch-screen-three-finger-zoom-gesture.cpp \
     $$PWD/touch-screen-two-finger-swipe-gesture.cpp \
-    $$PWD/touch-screen-two-finger-tap-gesture.cpp
+    $$PWD/touch-screen-two-finger-tap-gesture.cpp \
+    $$PWD/touch-screen-two-finger-zoom-gesture.cpp
