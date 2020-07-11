@@ -32,6 +32,7 @@
 #include "touch-screen/touch-screen-four-finger-zoom-gesture.h"
 #include "touch-screen/touch-screen-five-finger-zoom-gesture.h"
 #include "touch-screen/touch-screen-two-finger-tap-gesture.h"
+#include "touch-screen/touch-screen-two-finger-swipe-gesture.h"
 
 #include "settings-manager.h"
 #include "uinput-helper.h"
@@ -58,6 +59,7 @@ int main(int argc, char *argv[])
     TouchScreenFourFingerZoomGesture *fourFingerZoom = new TouchScreenFourFingerZoomGesture(manager);
     TouchScreenFiveFingerZoomGesture *fiveFingerZoom = new TouchScreenFiveFingerZoomGesture(manager);
     TouchScreenTwoFingerTapGesture *twoFingerTap = new TouchScreenTwoFingerTapGesture(manager);
+    TouchScreenTwoFingerSwipeGesture *twoFingerSwipe = new TouchScreenTwoFingerSwipeGesture(manager);
 
     EventMonitor em;
     em.initTouchScreenGestureManager(manager);
