@@ -35,7 +35,8 @@ public:
         Unknow,
         Swipe,
         Zoom,
-        Tap
+        Tap,
+        DragAndTap
     };
     Q_ENUM(GestureType)
 
