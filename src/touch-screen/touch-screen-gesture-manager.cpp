@@ -91,6 +91,10 @@ void TouchScreenGestureManager::onGestureUpdated(int index)
             }
         }
     }
+
+    if (gesture->type() == TouchScreenGestureInterface::DragAndTap) {
+        UInputHelper::getInstance()->clickMouseRightButton();
+    }
 }
 
 void TouchScreenGestureManager::onGestureCancelled(int index)
