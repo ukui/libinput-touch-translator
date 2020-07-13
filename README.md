@@ -38,3 +38,15 @@ I provide a graphics interface for configure the shortcut of different touch ges
 > systemctl start ukui-touch.service
 - sudo /usr/bin/ukui-touch-translator-config for find usage and config them
 - have a try on touchscreen and touchpad
+
+On Ubuntu is add PPA (focal only).
+
+> sudo add-apt-repository ppa:larue/libinput-touch-translator
+
+> sudo apt-get update
+
+> apt source libinput-touch-translator && sudo apt build-dep libinput-touch-translator
+
+or
+
+> sudo apt install libinput-touch-translator
