@@ -1,3 +1,9 @@
+libinput-touch-translator (0.1-2) focal; urgency=medium
+
+  * more gesture support, fix confilictions.
+
+ -- Yue Lan <lanyue@ubuntukylin.com>  Mon, 13 Jul 2020 19:42:53 +0800
+
 libinput-touch-translator (0.1-1) focal; urgency=low
 
   * Initial release. Closes: #nnnn
