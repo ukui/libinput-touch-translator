@@ -83,6 +83,7 @@ QList<int> UInputHelper::parseShortcut(const QKeySequence &shortCut)
     QList<int> keys;
 
     auto shortcutString = shortCut.toString();
+
     QStringList stringList = shortcutString.split("+", QString::SkipEmptyParts);
     for (auto string : stringList) {
         int key = m_hash.value(string);
@@ -90,6 +91,9 @@ QList<int> UInputHelper::parseShortcut(const QKeySequence &shortCut)
             keys<<key;
         }
     }
+
+    if (shortcutString.contains("++"))
+        keys<<KEY_LEFTSHIFT<<KEY_EQUAL;
 
     return keys;
 }

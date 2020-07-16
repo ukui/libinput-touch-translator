@@ -94,7 +94,7 @@ void TouchScreenGestureManager::onGestureUpdated(int index)
             }
         }
         if (gesture->finger() == 2) {
-            UInputHelper::getInstance()->executeShortCut(gesture->lastDirection() == TouchScreenGestureInterface::ZoomIn? QKeySequence("Ctrl+="): QKeySequence("Ctrl+-"));
+            UInputHelper::getInstance()->executeShortCut(gesture->lastDirection() == TouchScreenGestureInterface::ZoomIn? QKeySequence("Ctrl++"): QKeySequence("Ctrl+-"));
         }
     } else {
         if (gesture->finger() == 2) {
