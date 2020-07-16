@@ -27,6 +27,8 @@
 #include "settings-manager.h"
 #include "uinput-helper.h"
 
+#include "touch-screen-two-finger-swipe-gesture.h"
+
 #include <QDebug>
 
 static TouchScreenGestureManager *instance = nullptr;
@@ -83,11 +85,23 @@ void TouchScreenGestureManager::onGestureUpdated(int index)
     auto gesture = m_gestures.at(index);
     qDebug()<<gesture->finger()<<"finger"<<gesture->type()<<"updated, current direction:"<<gesture->lastDirection();
 
+
     // cancel swipe gesture if any zoom gesture triggered.
     if (gesture->type() == TouchScreenGestureInterface::Zoom) {
         for (auto gesture : m_gestures) {
             if (gesture->type() == TouchScreenGestureInterface::Swipe) {
                 gesture->cancel();
+            }
+        }
+        if (gesture->finger() == 2) {
+            UInputHelper::getInstance()->executeShortCut(gesture->lastDirection() == TouchScreenGestureInterface::ZoomIn? QKeySequence("Ctrl+="): QKeySequence("Ctrl+-"));
+        }
+    } else {
+        if (gesture->finger() == 2) {
+            if (gesture->type() == TouchScreenGestureInterface::Swipe) {
+                auto twoFingerSwipe = static_cast<TouchScreenTwoFingerSwipeGesture *>(gesture);
+                auto offset = twoFingerSwipe->getLastOffset();
+                UInputHelper::getInstance()->wheel(offset/10);
             }
         }
     }

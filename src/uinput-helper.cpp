@@ -35,7 +35,7 @@ static struct uinput_user_dev uinput_dev;
 static int uinput_fd;
 
 int creat_user_uinput(void);
-int report_key(unsigned int type, unsigned int keycode, unsigned int value);
+int post_event(unsigned int type, unsigned int keycode, unsigned int value);
 
 static UInputHelper *instance = nullptr;
 
@@ -52,23 +52,30 @@ void UInputHelper::executeShortCut(const QKeySequence &shortCut)
     qDebug()<<list;
     auto keys = parseShortcut(shortCut);
     for (auto key: keys) {
-        int ret = report_key(EV_KEY, key, 1);
+        int ret = post_event(EV_KEY, key, 1);
         if (ret != 0) {
             qDebug()<<"failed, try recreate uinput";
             creat_user_uinput();
-            report_key(EV_KEY, key, 1);
+            post_event(EV_KEY, key, 1);
         }
     }
     for (auto key: keys) {
-        report_key(EV_KEY, key, 0);
+        post_event(EV_KEY, key, 0);
     }
 }
 
 void UInputHelper::clickMouseRightButton()
 {
     qDebug()<<"mouse click";
-    report_key(EV_KEY, BTN_RIGHT, 1);
-    report_key(EV_KEY, BTN_RIGHT, 0);
+    post_event(EV_KEY, BTN_RIGHT, 1);
+    post_event(EV_KEY, BTN_RIGHT, 0);
+}
+
+void UInputHelper::wheel(QPointF offset)
+{
+    qDebug()<<"wheel"<<offset;
+    post_event(EV_REL, REL_WHEEL, offset.toPoint().y());
+    post_event(EV_REL, REL_HWHEEL, offset.toPoint().x());
 }
 
 QList<int> UInputHelper::parseShortcut(const QKeySequence &shortCut)
@@ -196,6 +203,11 @@ int creat_user_uinput(void)
     // mouse right click
     ioctl(uinput_fd, UI_SET_KEYBIT, BTN_RIGHT);
 
+    // wheel
+    ioctl(uinput_fd, UI_SET_EVBIT, EV_REL);
+    ioctl(uinput_fd, UI_SET_RELBIT, REL_WHEEL);
+    ioctl(uinput_fd, UI_SET_RELBIT, REL_HWHEEL);
+
     for(i = 0; i < 256; i++){
         ioctl(uinput_fd, UI_SET_KEYBIT, i);
     }
@@ -214,7 +226,7 @@ int creat_user_uinput(void)
     }
 }
 
-int report_key(unsigned int type, unsigned int keycode, unsigned int value)
+int post_event(unsigned int type, unsigned int keycode, unsigned int value)
 {
     struct input_event key_event;
     int ret;

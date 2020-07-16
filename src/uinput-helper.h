@@ -28,6 +28,8 @@
 #include <QKeySequence>
 #include <QHash>
 
+#include <QPointF>
+
 class UInputHelper : public QObject
 {
     Q_OBJECT
@@ -39,6 +41,7 @@ signals:
 public slots:
     void executeShortCut(const QKeySequence &shortCut);
     void clickMouseRightButton();
+    void wheel(QPointF offset);
 
 protected:
     QList<int> parseShortcut(const QKeySequence &shortCut);

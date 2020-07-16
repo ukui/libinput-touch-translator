@@ -55,6 +55,10 @@ SettingsManager::SettingsManager(QObject *parent) : QObject(parent)
         watcher->addPath(m_settings->fileName());
     });
 
+    if (!m_settings->childGroups().isEmpty()) {
+        return;
+    }
+
     setToucScreenShortCut(TouchScreenGestureInterface::Swipe, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::Left, 3, QKeySequence("Alt+Left"));
     setToucScreenShortCut(TouchScreenGestureInterface::Swipe, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::Right, 3, QKeySequence("Alt+Right"));
     setToucScreenShortCut(TouchScreenGestureInterface::Swipe, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::Up, 3, QKeySequence("Ctrl+End"));

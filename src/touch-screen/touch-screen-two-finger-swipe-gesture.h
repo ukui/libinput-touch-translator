@@ -48,6 +48,8 @@ public:
 
     bool isCancelled() override {return m_isCancelled;}
 
+    QPointF getLastOffset();
+
 private:
     int m_currentFingerCount = 0;
 
@@ -59,6 +61,8 @@ private:
     QPointF m_startPoints[2];
     QPointF m_lastPoints[2];
     QPointF m_currentPoints[2];
+
+    QPointF m_lastOffset;
 };
 
 #endif // TOUCHSCREENTWOFINGERSWIPEGESTURE_H

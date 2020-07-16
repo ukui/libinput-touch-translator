@@ -140,6 +140,8 @@ TouchScreenGestureInterface::State TouchScreenTwoFingerSwipeGesture::handleInput
             m_lastDirection = delta.y() > 0? Down: Up;
         }
 
+        m_lastOffset = delta;
+
         emit gestureUpdate(getGestureIndex());
 
         return Update;
@@ -200,3 +202,9 @@ void TouchScreenTwoFingerSwipeGesture::cancel()
     m_isCancelled = true;
     emit gestureCancelled(getGestureIndex());
 }
+
+QPointF TouchScreenTwoFingerSwipeGesture::getLastOffset()
+{
+    return m_lastOffset;
+}
+
