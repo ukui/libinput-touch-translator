@@ -122,6 +122,7 @@ void TouchScreenTwoFingerDragAndTapGesture::reset()
 void TouchScreenTwoFingerDragAndTapGesture::cancel()
 {
     m_isCancelled = true;
+    emit gestureCancelled(getGestureIndex());
 }
 
 bool TouchScreenTwoFingerDragAndTapGesture::isCancelled()

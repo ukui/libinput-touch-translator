@@ -106,6 +106,15 @@ void TouchScreenGestureManager::onGestureUpdated(int index)
         }
     }
 
+    if (gesture->type() == TouchScreenGestureInterface::Swipe || gesture->type() == TouchScreenGestureInterface::Zoom) {
+        // cancel drag and tap gesture
+        for (auto gesture : m_gestures) {
+            if (gesture->type() == TouchScreenGestureInterface::DragAndTap) {
+                gesture->cancel();
+            }
+        }
+    }
+
     if (gesture->type() == TouchScreenGestureInterface::DragAndTap) {
         UInputHelper::getInstance()->clickMouseRightButton();
     }
