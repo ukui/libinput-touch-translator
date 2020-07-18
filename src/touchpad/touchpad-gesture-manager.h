@@ -73,8 +73,14 @@ private:
     int m_lastFinger = 0;
     bool m_isCancelled = 0;
 
+    double m_lastDxmm = 0;
+    double m_lastDymm = 0;
+
     double m_totalDxmm = 0;
     double m_totalDymm = 0;
+
+    double m_lastScale = 0;
+    double m_lastAngle = 0;
 
     double m_totalScale = 0;
     double m_totalAngle = 0;

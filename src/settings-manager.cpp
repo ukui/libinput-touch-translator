@@ -93,6 +93,9 @@ SettingsManager::SettingsManager(QObject *parent) : QObject(parent)
     setTouchPadShortCut(TouchpadGestureManager::Pinch, TouchpadGestureManager::Finished, TouchpadGestureManager::ZoomIn, 4, QKeySequence("F11"));
     setTouchPadShortCut(TouchpadGestureManager::Pinch, TouchpadGestureManager::Finished, TouchpadGestureManager::ZoomOut, 4, QKeySequence("F11"));
 
+    setTouchPadShortCut(TouchpadGestureManager::Pinch, TouchpadGestureManager::Finished, TouchpadGestureManager::ZoomIn, 2, QKeySequence("Ctrl++"));
+    setTouchPadShortCut(TouchpadGestureManager::Pinch, TouchpadGestureManager::Finished, TouchpadGestureManager::ZoomOut, 2, QKeySequence("Ctrl+-"));
+
     m_settings->sync();
 }
 

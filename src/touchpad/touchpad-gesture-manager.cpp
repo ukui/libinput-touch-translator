@@ -57,6 +57,32 @@ void TouchpadGestureManager::processEvent(libinput_event *event)
         // total offset
         m_totalDxmm += dx;
         m_totalDymm += dy;
+
+        m_lastDxmm += dx;
+        m_lastDymm += dy;
+        if (qAbs(m_lastDxmm) > 20 || qAbs(m_lastDymm) > 20) {
+            // update
+            if (qAbs(m_lastDxmm) > qAbs(m_lastDymm)) {
+                if (m_lastDxmm > 0) {
+                    // right
+                    emit eventTriggered(Swipe, m_lastFinger, Update, Right);
+                } else {
+                    // left
+                    emit eventTriggered(Swipe, m_lastFinger, Update, Left);
+                }
+            } else {
+                if (m_lastDymm > 0) {
+                    // down
+                    emit eventTriggered(Swipe, m_lastFinger, Update, Down);
+                } else {
+                    // up
+                    emit eventTriggered(Swipe, m_lastFinger, Update, Up);
+                }
+            }
+
+            m_lastDxmm = 0;
+            m_lastDymm = 0;
+        }
         break;
     }
     case LIBINPUT_EVENT_GESTURE_SWIPE_END: {
@@ -96,11 +122,30 @@ void TouchpadGestureManager::processEvent(libinput_event *event)
     case LIBINPUT_EVENT_GESTURE_PINCH_BEGIN: {
         reset();
         m_lastFinger = libinput_event_gesture_get_finger_count(t);
+        m_lastScale = -1;
         break;
     }
     case LIBINPUT_EVENT_GESTURE_PINCH_UPDATE: {
         m_totalScale = libinput_event_gesture_get_scale(t);
         m_totalAngle += libinput_event_gesture_get_angle_delta(t); // useless now
+        qDebug()<<m_totalScale;
+
+        if (m_lastScale < 0) {
+            m_lastScale = m_totalScale;
+            break;
+        }
+
+        if (qMax(m_totalScale/m_lastScale, m_lastScale/m_totalScale) > 1.5) {
+            if (m_totalScale > m_lastScale) {
+                // zoom in
+                emit eventTriggered(Pinch, m_lastFinger, Update, ZoomIn);
+            } else {
+                // zoom out
+                emit eventTriggered(Pinch, m_lastFinger, Update, ZoomOut);
+            }
+            m_lastScale = m_totalScale;
+        }
+
         break;
     }
     case LIBINPUT_EVENT_GESTURE_PINCH_END: {
@@ -135,8 +180,14 @@ void TouchpadGestureManager::reset()
     m_totalDxmm = 0;
     m_totalDymm = 0;
 
+    m_lastDxmm = 0;
+    m_lastDymm = 0;
+
     m_totalScale = 0;
     m_totalAngle = 0;
+
+    m_lastScale = -1;
+    m_lastAngle = 0;
 }
 
 void TouchpadGestureManager::onEventTriggerd(TouchpadGestureManager::GestureType type, int fingerCount, TouchpadGestureManager::State state, TouchpadGestureManager::Direction direction)
@@ -150,5 +201,8 @@ void TouchpadGestureManager::onEventTriggerd(TouchpadGestureManager::GestureType
 
 TouchpadGestureManager::TouchpadGestureManager(QObject *parent) : QObject(parent)
 {
+    qRegisterMetaType<GestureType>("GestureType");
+    qRegisterMetaType<State>("State");
+    qRegisterMetaType<Direction>("Direction");
     connect(this, &TouchpadGestureManager::eventTriggered, this, &TouchpadGestureManager::onEventTriggerd);
 }

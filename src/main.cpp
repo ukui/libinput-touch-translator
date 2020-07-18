@@ -36,6 +36,8 @@
 #include "touch-screen/touch-screen-two-finger-zoom-gesture.h"
 #include "touch-screen/touch-screen-two-finger-drag-and-tap-gesture.h"
 
+#include "touchpad/touchpad-gesture-manager.h"
+
 #include "settings-manager.h"
 #include "uinput-helper.h"
 
@@ -49,6 +51,7 @@ int main(int argc, char *argv[])
 
     // init manager
     auto manager = TouchScreenGestureManager::getManager();
+    TouchpadGestureManager::getManager();
     SettingsManager::getManager();
 
     UInputHelper::getInstance();
