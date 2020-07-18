@@ -72,7 +72,7 @@ SettingsManager::SettingsManager(QObject *parent) : QObject(parent)
     setToucScreenShortCut(TouchScreenGestureInterface::Swipe, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::Up, 5, QKeySequence("Ctrl+End"));
     setToucScreenShortCut(TouchScreenGestureInterface::Swipe, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::Down, 5, QKeySequence("Ctrl+Home"));
 
-    setToucScreenShortCut(TouchScreenGestureInterface::Zoom, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::ZoomIn, 3, QKeySequence("Ctrl+="));
+    setToucScreenShortCut(TouchScreenGestureInterface::Zoom, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::ZoomIn, 3, QKeySequence("Ctrl++"));
     setToucScreenShortCut(TouchScreenGestureInterface::Zoom, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::ZoomOut, 3, QKeySequence("Ctrl+-"));
     setToucScreenShortCut(TouchScreenGestureInterface::Zoom, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::ZoomIn, 4, QKeySequence("F11"));
     setToucScreenShortCut(TouchScreenGestureInterface::Zoom, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::ZoomOut, 4, QKeySequence("F11"));
