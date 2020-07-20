@@ -75,7 +75,7 @@ void UInputHelper::wheel(QPointF offset)
 {
     qDebug()<<"wheel"<<offset;
     post_event(EV_REL, REL_WHEEL, offset.toPoint().y());
-    post_event(EV_REL, REL_HWHEEL, offset.toPoint().x());
+    post_event(EV_REL, REL_HWHEEL, -offset.toPoint().x());
 }
 
 QList<int> UInputHelper::parseShortcut(const QKeySequence &shortCut)
