@@ -34,8 +34,6 @@
 
 #include <QDebug>
 
-static int finger_count = 0;
-
 static int open_restricted(const char *path, int flags, void *user_data)
 {
     int fd = open(path, flags);
@@ -120,12 +118,6 @@ void EventMonitor::startMonitor()
                 auto type = libinput_event_get_type(event);
                 //printf("loop\n");
 
-                if (type == LIBINPUT_EVENT_TOUCH_DOWN) {
-                    finger_count++;
-                } else if (type == LIBINPUT_EVENT_TOUCH_UP) {
-                    finger_count--;
-                }
-
                 switch (type) {
                 case LIBINPUT_EVENT_TOUCH_DOWN:
                 case LIBINPUT_EVENT_TOUCH_MOTION:
@@ -135,9 +127,6 @@ void EventMonitor::startMonitor()
                     //printf("touch event %d\n", type);
                     if (m_touchScreenGestureManager) {
                         m_touchScreenGestureManager->processEvent(event);
-                    }
-                    if (finger_count == 0) {
-                        m_touchScreenGestureManager->forceReset();
                     }
                     break;
                 }
