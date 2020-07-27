@@ -42,6 +42,7 @@ TouchScreenGestureInterface::State TouchScreenTwoFingerDragAndTapGesture::handle
             auto xmm = libinput_event_touch_get_x(touch_event);
             auto ymm = libinput_event_touch_get_y(touch_event);
             m_firstPoint = QPointF(xmm, ymm);
+            m_firstFingerStartPos = m_firstPoint;
             break;
         }
         case 2: {
@@ -49,6 +50,7 @@ TouchScreenGestureInterface::State TouchScreenTwoFingerDragAndTapGesture::handle
             auto xmm = libinput_event_touch_get_x(touch_event);
             auto ymm = libinput_event_touch_get_y(touch_event);
             m_secondPoint = QPointF(xmm, ymm);
+            m_secondFingerStartPos = m_secondPoint;
 
             m_lastSecondFingerPressedTime = libinput_event_touch_get_time(touch_event);
             m_isStarted = true;
@@ -81,7 +83,9 @@ TouchScreenGestureInterface::State TouchScreenTwoFingerDragAndTapGesture::handle
             auto touch_event = libinput_event_get_touch_event(event);
             auto timeInterval = libinput_event_touch_get_time(touch_event) - m_lastSecondFingerPressedTime;
             auto distance = (m_secondPoint - m_firstPoint).manhattanLength();
-            if (timeInterval < 300 && distance < 50 && !m_isCancelled) {
+            auto firstFingerDelta = (m_firstPoint - m_firstFingerStartPos).manhattanLength();
+            auto secondFingerDelta = (m_secondPoint - m_secondFingerStartPos).manhattanLength();
+            if (timeInterval < 300 && distance < 50 && !m_isCancelled && firstFingerDelta > 10 && secondFingerDelta < 10) {
                 emit gestureUpdate(getGestureIndex());
                 return Update;
             }
@@ -112,6 +116,9 @@ void TouchScreenTwoFingerDragAndTapGesture::reset()
 {
     m_firstPoint = QPointF();
     m_secondPoint = QPointF();
+
+    m_firstFingerStartPos = QPointF();
+    m_secondFingerStartPos = QPointF();
 
     m_isCancelled = false;
     m_isStarted = false;

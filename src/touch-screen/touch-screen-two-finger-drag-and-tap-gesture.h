@@ -55,6 +55,9 @@ private:
     QPointF m_firstPoint;
     QPointF m_secondPoint;
 
+    QPointF m_firstFingerStartPos;
+    QPointF m_secondFingerStartPos;
+
     bool m_isCancelled = false;
     bool m_isStarted = false;
 };
