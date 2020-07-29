@@ -1,3 +1,9 @@
+libinput-touch-translator (0.2) groovy; urgency=medium
+
+  * new release for groovy.
+
+ -- Yue Lan <lanyue@ubuntukylin.com>  Wed, 29 Jul 2020 14:44:14 +0800
+
 libinput-touch-translator (0.1-2) focal; urgency=medium
 
   * more gesture support, fix confilictions.
