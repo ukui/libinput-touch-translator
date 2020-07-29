@@ -74,10 +74,10 @@ SettingsManager::SettingsManager(QObject *parent) : QObject(parent)
 
     setToucScreenShortCut(TouchScreenGestureInterface::Zoom, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::ZoomIn, 3, QKeySequence("Ctrl++"));
     setToucScreenShortCut(TouchScreenGestureInterface::Zoom, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::ZoomOut, 3, QKeySequence("Ctrl+-"));
-    setToucScreenShortCut(TouchScreenGestureInterface::Zoom, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::ZoomIn, 4, QKeySequence("F11"));
-    setToucScreenShortCut(TouchScreenGestureInterface::Zoom, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::ZoomOut, 4, QKeySequence("F11"));
+    setToucScreenShortCut(TouchScreenGestureInterface::Zoom, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::ZoomIn, 4, QKeySequence("Alt+F10"));
+    setToucScreenShortCut(TouchScreenGestureInterface::Zoom, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::ZoomOut, 4, QKeySequence("Alt+F10"));
     setToucScreenShortCut(TouchScreenGestureInterface::Zoom, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::ZoomIn, 5, QKeySequence("F11"));
-    setToucScreenShortCut(TouchScreenGestureInterface::Zoom, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::ZoomOut, 5, QKeySequence("F11"));
+    setToucScreenShortCut(TouchScreenGestureInterface::Zoom, TouchScreenGestureInterface::Finished, TouchScreenGestureInterface::ZoomOut, 5, QKeySequence("Alt+F9"));
 
     setTouchPadShortCut(TouchpadGestureManager::Swipe, TouchpadGestureManager::Finished, TouchpadGestureManager::Left, 3, QKeySequence("Alt+Left"));
     setTouchPadShortCut(TouchpadGestureManager::Swipe, TouchpadGestureManager::Finished, TouchpadGestureManager::Right, 3, QKeySequence("Alt+Right"));
@@ -90,8 +90,8 @@ SettingsManager::SettingsManager(QObject *parent) : QObject(parent)
 
     setTouchPadShortCut(TouchpadGestureManager::Pinch, TouchpadGestureManager::Finished, TouchpadGestureManager::ZoomIn, 3, QKeySequence("Ctrl++"));
     setTouchPadShortCut(TouchpadGestureManager::Pinch, TouchpadGestureManager::Finished, TouchpadGestureManager::ZoomOut, 3, QKeySequence("Ctrl+-"));
-    setTouchPadShortCut(TouchpadGestureManager::Pinch, TouchpadGestureManager::Finished, TouchpadGestureManager::ZoomIn, 4, QKeySequence("F11"));
-    setTouchPadShortCut(TouchpadGestureManager::Pinch, TouchpadGestureManager::Finished, TouchpadGestureManager::ZoomOut, 4, QKeySequence("F11"));
+    setTouchPadShortCut(TouchpadGestureManager::Pinch, TouchpadGestureManager::Finished, TouchpadGestureManager::ZoomIn, 4, QKeySequence("Alt+F10"));
+    setTouchPadShortCut(TouchpadGestureManager::Pinch, TouchpadGestureManager::Finished, TouchpadGestureManager::ZoomOut, 4, QKeySequence("Alt+F9"));
 
     setTouchPadShortCut(TouchpadGestureManager::Pinch, TouchpadGestureManager::Finished, TouchpadGestureManager::ZoomIn, 2, QKeySequence("Ctrl++"));
     setTouchPadShortCut(TouchpadGestureManager::Pinch, TouchpadGestureManager::Finished, TouchpadGestureManager::ZoomOut, 2, QKeySequence("Ctrl+-"));
