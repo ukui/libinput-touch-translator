@@ -2,7 +2,7 @@ Source: libinput-touch-translator
 Section: utils
 Priority: optional
 Maintainer: Yue Lan <lanyue@ubuntukylin.com>
-Build-Depends: debhelper-compat (= 12),
+Build-Depends: debhelper-compat (=12),
                pkg-config,
                qt5-qmake,
                libinput-dev,
