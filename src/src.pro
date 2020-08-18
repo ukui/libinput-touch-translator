@@ -30,8 +30,8 @@ SOURCES += \
 target.path = /usr/libexec
 !isEmpty(target.path): INSTALLS += target
 
-service.files = systemd/ukui-touch.service
-service.path = /usr/lib/systemd/system
+service.files = systemd/libinput-touch-translator.service
+service.path = /lib/systemd/system
 INSTALLS += service
 
 HEADERS += \
