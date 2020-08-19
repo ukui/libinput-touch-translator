@@ -22,7 +22,7 @@ Multi-Arch: allowed
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends},
          ${shlibs:Depends},
-Description: System service translating gesture to shortcut
- This package provides the service which can captrue touch event
- and translator them to keyboard shortcut or more.
- It also provides a graphics shortcut config interface.
+Description: System service translates gestures to shortcuts
+ This package provides the service which can capture touch events
+ and translates them to keyboard shortcuts.
+ It also provides a graphical shortcut configuration interface.

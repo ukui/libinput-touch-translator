@@ -1,5 +1,5 @@
-libinput-touch-translator (0.1-2) unstable; urgency=medium
+libinput-touch-translator (1.0.0-1) unstable; urgency=medium
 
-  * Initial release. Closes: #nnnn
+  * Initial release. (Closes: #968662)
 
  -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 09 Jul 2020 16:05:45 +0800
