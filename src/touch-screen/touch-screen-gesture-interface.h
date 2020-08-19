@@ -32,7 +32,7 @@ class TouchScreenGestureInterface : public QObject
     Q_OBJECT
 public:
     enum GestureType {
-        Unknow,
+        Unknown,
         Swipe,
         Zoom,
         Tap,

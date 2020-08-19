@@ -1,2 +1,2 @@
-# You must remove unused comment lines for the released package.
-version=3
+version=4
+https://github.com/ukui/libinput-touch-translator/releases .*/libinput-touch-translator_(\d\S+)\.orig\.tar\.gz

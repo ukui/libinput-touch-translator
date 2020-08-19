@@ -34,7 +34,7 @@ class EventMonitor : public QObject
     Q_OBJECT
 public:
     enum ActionType {
-        UNKNOW,
+        UNKNOWN,
         FINGER_SWIPE,
         FINGER_ZOOM
     };

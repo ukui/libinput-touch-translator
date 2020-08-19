@@ -1,29 +1,27 @@
 Source: libinput-touch-translator
 Section: utils
 Priority: optional
-Maintainer: Yue Lan <lanyue@ubuntukylin.com>
-Build-Depends: debhelper-compat (=12),
+Maintainer: Kylin Team <team+kylin@tracker.debian.org>
+Uploaders: handsome_feng <jianfengli@ubuntukylin.com>
+Build-Depends: debhelper-compat (=13),
                pkg-config,
                qt5-qmake,
                libinput-dev,
                libudev-dev,
                qtbase5-dev,
                libkf5xmlgui-dev
-Standards-Version: 4.1.4
-Homepage: https://github.com/ukui/libinput-touch-translator.git
+Standards-Version: 4.5.0
+Rules-Requires-Root: no
+Homepage: https://github.com/ukui/libinput-touch-translator
+Vcs-Git: https://github.com/ukui/libinput-touch-translator.git
+Vcs-Browser: https://github.com/ukui/libinput-touch-translator
 
 Package: libinput-touch-translator
-Section: utils
 Architecture: any
 Multi-Arch: allowed
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends},
          ${shlibs:Depends},
-         libinput10,
-         libudev1,
-         libqt5core5a,
-         libqt5gui5,
-         libkf5xmlgui5
 Description: System service translating gesture to shortcut
  This package provides the service which can captrue touch event
  and translator them to keyboard shortcut or more.
