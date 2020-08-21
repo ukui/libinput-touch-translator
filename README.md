@@ -35,7 +35,7 @@ I provide a graphics interface for configure the shortcut of different touch ges
 - mkdir build && cd build
 - qmake .. && sudo make install
 - run project with sudo, or use
-> systemctl start ukui-touch.service
+> systemctl start libinput-touch-translator.service
 - sudo /usr/bin/ukui-touch-translator-config for find usage and config them
 - have a try on touchscreen and touchpad
 
