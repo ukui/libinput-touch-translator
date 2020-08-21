@@ -116,7 +116,7 @@ TouchScreenGestureInterface::State TouchScreenTwoFingerZoomGesture::handleInputE
         auto last_distance = (m_lastPoints[0] - m_lastPoints[1]).manhattanLength();
         auto current_distance = (m_currentPoints[0] - m_currentPoints[1]).manhattanLength();
         auto delta = current_distance - last_distance;
-        if (qAbs(delta) < 15) {
+        if (qAbs(delta) < 20) {
             return Ignore;
         }
 
