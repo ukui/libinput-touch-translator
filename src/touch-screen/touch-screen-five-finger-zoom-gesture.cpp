@@ -122,8 +122,8 @@ TouchScreenGestureInterface::State TouchScreenFiveFingerZoomGesture::handleInput
         auto current_distance03 = (m_currentPoints[0] - m_currentPoints[3]).manhattanLength();
         auto current_distance04 = (m_currentPoints[0] - m_currentPoints[4]).manhattanLength();
 
-        auto last_distance = (last_distance01 + last_distance02 + last_distance03 + last_distance04)/4;
-        auto current_distance = (current_distance01 + current_distance02 + current_distance03 + current_distance04)/4;
+        auto last_distance = (last_distance01 + last_distance02 + last_distance03 + last_distance04)/2;
+        auto current_distance = (current_distance01 + current_distance02 + current_distance03 + current_distance04)/2;
         auto delta = current_distance - last_distance;
         if (qAbs(delta) < 25) {
             return Ignore;
