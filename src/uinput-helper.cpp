@@ -29,7 +29,11 @@
 #include <linux/uinput.h>
 #include <linux/input.h>
 
+#include <KWindowSystem>
+
 #include <QDebug>
+
+#include <X11/Xlib.h>
 
 static struct uinput_user_dev uinput_dev;
 static int uinput_fd;
@@ -46,8 +50,26 @@ UInputHelper *UInputHelper::getInstance()
     return instance;
 }
 
+bool UInputHelper::isPlatformX11()
+{
+    Display *disp = XOpenDisplay(NULL);
+
+    if (NULL != disp) {
+        XCloseDisplay(disp);
+        return true;
+    }
+
+    return false;
+}
+
 void UInputHelper::executeShortCut(const QKeySequence &shortCut)
 {
+    if (isPlatformX11()) {
+        auto window = KWindowSystem::activeWindow();
+        auto info = KWindowInfo(window, NET::WMAllProperties, NET::WM2AllProperties);
+        qDebug()<<info.name()<<info.windowClassName()<<info.windowClassClass()<<"===";
+    }
+
     auto list = QKeySequence::listFromString(shortCut.toString());
     qDebug()<<list;
     auto keys = parseShortcut(shortCut);
@@ -66,6 +88,12 @@ void UInputHelper::executeShortCut(const QKeySequence &shortCut)
 
 void UInputHelper::clickMouseRightButton()
 {
+    if (isPlatformX11()) {
+        auto window = KWindowSystem::activeWindow();
+        auto info = KWindowInfo(window, NET::WMAllProperties, NET::WM2AllProperties);
+        qDebug()<<info.name()<<info.windowClassName()<<info.windowClassClass()<<"===";
+    }
+
     qDebug()<<"mouse click";
     post_event(EV_KEY, BTN_RIGHT, 1);
     post_event(EV_KEY, BTN_RIGHT, 0);
@@ -73,7 +101,13 @@ void UInputHelper::clickMouseRightButton()
 
 void UInputHelper::wheel(QPointF offset)
 {
-    qDebug()<<"wheel"<<offset;
+    if (isPlatformX11()) {
+        auto window = KWindowSystem::activeWindow();
+        auto info = KWindowInfo(window, NET::WMAllProperties, NET::WM2AllProperties);
+        qDebug()<<info.name()<<info.windowClassName()<<info.windowClassClass()<<"===";
+    }
+
+    qDebug()<<"wheel"<<offset<<"...";
     post_event(EV_REL, REL_WHEEL, offset.toPoint().y());
     post_event(EV_REL, REL_HWHEEL, -offset.toPoint().x());
 }

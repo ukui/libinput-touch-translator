@@ -21,6 +21,7 @@
  */
 
 #include <QCoreApplication>
+#include <QGuiApplication>
 
 #include "event-monitor.h"
 
@@ -42,9 +43,44 @@
 #include "uinput-helper.h"
 
 #include <QThread>
+#include <X11/Xlib.h>
 
 int main(int argc, char *argv[])
 {
+    if (UInputHelper::isPlatformX11()) {
+        QGuiApplication a(argc, argv);
+
+        QThread t1;
+
+        // init manager
+        auto manager = TouchScreenGestureManager::getManager();
+        TouchpadGestureManager::getManager();
+        SettingsManager::getManager();
+
+        UInputHelper::getInstance();
+
+        // init gesutre and register into gesture manager
+        TouchScreenThreeFingerSwipeGesture *threeFingerSwipe = new TouchScreenThreeFingerSwipeGesture(manager);
+        TouchScreenFourFingerSwipeGesture *fourFingerSwipe = new TouchScreenFourFingerSwipeGesture(manager);
+        TouchScreenFiveFingerSwipeGesture *fiveFingerSwipe = new TouchScreenFiveFingerSwipeGesture(manager);
+        TouchScreenThreeFingerZoomGesture *threeFingerZoom = new TouchScreenThreeFingerZoomGesture(manager);
+        TouchScreenFourFingerZoomGesture *fourFingerZoom = new TouchScreenFourFingerZoomGesture(manager);
+        TouchScreenFiveFingerZoomGesture *fiveFingerZoom = new TouchScreenFiveFingerZoomGesture(manager);
+        TouchScreenTwoFingerTapGesture *twoFingerTap = new TouchScreenTwoFingerTapGesture(manager);
+        TouchScreenTwoFingerSwipeGesture *twoFingerSwipe = new TouchScreenTwoFingerSwipeGesture(manager);
+        TouchScreenTwoFingerZoomGesture *twoFingerZoom = new TouchScreenTwoFingerZoomGesture(manager);
+        TouchScreenTwoFingerDragAndTapGesture *twoFingerDragAndTap = new TouchScreenTwoFingerDragAndTapGesture(manager);
+
+        EventMonitor em;
+        em.initTouchScreenGestureManager(manager);
+        em.moveToThread(&t1);
+
+        t1.connect(&t1, &QThread::started, &em, &EventMonitor::startMonitor);
+        t1.start();
+
+        return a.exec();
+    }
+
     QCoreApplication a(argc, argv);
 
     QThread t1;
