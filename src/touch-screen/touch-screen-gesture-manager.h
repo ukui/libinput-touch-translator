@@ -23,7 +23,10 @@
 #ifndef TOUCHSCREENGESTUREMANAGER_H
 #define TOUCHSCREENGESTUREMANAGER_H
 
+#include "touch-screen-gesture-interface.h"
+
 #include <QObject>
+#include <QHash>
 
 #include <libinput.h>
 
@@ -37,9 +40,19 @@ public:
     static TouchScreenGestureManager *getManager();
 
     int queryGestureIndex(TouchScreenGestureInterface *gesture);
+    int queryGestureIndex(TouchScreenGestureInterface::GestureType type, int fingerCount);
 
     void processEvent(libinput_event *event);
     void forceReset();
+
+    /*!
+     * \brief initIgnoreHash
+     * \note
+     * this method should be call after gesture resgistered.
+     */
+    void initIgnoreHash();
+
+    bool shouldEmulate(int gestureIndex, const QString &name);
 signals:
 
 public slots:
@@ -53,6 +66,9 @@ private:
 
     explicit TouchScreenGestureManager(QObject *parent = nullptr);
     QList<TouchScreenGestureInterface *> m_gestures;
+
+    // gesture index and app name
+    QHash<int, QString> m_ignoreHash;
 };
 
 #endif // TOUCHSCREENGESTUREMANAGER_H

@@ -22,12 +22,12 @@
 
 #include "touch-screen-gesture-manager.h"
 
-#include "touch-screen-gesture-interface.h"
-
 #include "settings-manager.h"
 #include "uinput-helper.h"
 
 #include "touch-screen-two-finger-swipe-gesture.h"
+
+#include <KWindowSystem>
 
 #include <QDebug>
 
@@ -60,6 +60,16 @@ int TouchScreenGestureManager::queryGestureIndex(TouchScreenGestureInterface *ge
     return m_gestures.indexOf(gesture);
 }
 
+int TouchScreenGestureManager::queryGestureIndex(TouchScreenGestureInterface::GestureType type, int fingerCount)
+{
+    for (auto gesture : m_gestures) {
+        if (gesture->type() == type && fingerCount == gesture->finger())
+            return m_gestures.indexOf(gesture);
+    }
+
+    return -1;
+}
+
 void TouchScreenGestureManager::processEvent(libinput_event *event)
 {
     for (auto gesture : m_gestures) {
@@ -73,6 +83,34 @@ void TouchScreenGestureManager::forceReset()
     for (auto gesture : m_gestures) {
         gesture->reset();
     }
+}
+
+void TouchScreenGestureManager::initIgnoreHash()
+{
+    int twoFingerZoom = queryGestureIndex(TouchScreenGestureInterface::Zoom, 2);
+    m_ignoreHash.insert(twoFingerZoom, "google-chrome");
+    m_ignoreHash.insert(twoFingerZoom, "browser360-cn");
+}
+
+bool TouchScreenGestureManager::shouldEmulate(int gestureIndex, const QString &name)
+{
+    if (!UInputHelper::isPlatformX11())
+        return true;
+
+    qDebug()<<m_ignoreHash.values(gestureIndex);
+
+    QStringList l = m_ignoreHash.values(gestureIndex);
+    if (l.isEmpty())
+        return true;
+
+    for (QString content : l) {
+        if (content.contains(name))
+            return false;
+        if (content.toLower().contains(name.toLower()))
+            return false;
+    }
+
+    return true;
 }
 
 void TouchScreenGestureManager::onGestureBegin(int index)
@@ -94,6 +132,15 @@ void TouchScreenGestureManager::onGestureUpdated(int index)
             }
         }
         if (gesture->finger() == 2) {
+            if (UInputHelper::isPlatformX11()) {
+                auto window = KWindowSystem::activeWindow();
+                auto info = KWindowInfo(window, NET::WMAllProperties, NET::WM2AllProperties);
+                qDebug()<<"name"<<info.name()<<"windowClassName"<<info.windowClassName()<<"windowClassClass"<<info.windowClassClass()<<"===";
+                if (!shouldEmulate(index, info.windowClassName())) {
+                    qDebug()<<"ignore"<<info.windowClassName();
+                    return;
+                }
+            }
             UInputHelper::getInstance()->executeShortCut(gesture->lastDirection() == TouchScreenGestureInterface::ZoomIn? QKeySequence("Ctrl++"): QKeySequence("Ctrl+-"));
         }
     } else {

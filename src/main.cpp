@@ -71,6 +71,9 @@ int main(int argc, char *argv[])
         TouchScreenTwoFingerZoomGesture *twoFingerZoom = new TouchScreenTwoFingerZoomGesture(manager);
         TouchScreenTwoFingerDragAndTapGesture *twoFingerDragAndTap = new TouchScreenTwoFingerDragAndTapGesture(manager);
 
+        // x11 only
+        TouchScreenGestureManager::getManager()->initIgnoreHash();
+
         EventMonitor em;
         em.initTouchScreenGestureManager(manager);
         em.moveToThread(&t1);
