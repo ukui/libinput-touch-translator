@@ -153,6 +153,12 @@ TouchScreenGestureInterface::State TouchScreenOneFingerEdgeGesture::handleInputE
                 if (m_direction == None) {
                     return Ignore;
                 }
+                if (m_direction == Down) {
+                    if (longestDistance() < 80) {
+                        reset();
+                        return Ignore;
+                    }
+                }
                 gestureFinished(getGestureIndex());
                 qDebug()<<"longestDistance"<<longestDistance();
                 return Finished;
