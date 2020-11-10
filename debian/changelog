@@ -1,3 +1,9 @@
+libinput-touch-translator (1.0.0-1+1110) v101; urgency=medium
+
+  * fix can not auto start.
+
+ -- Yue Lan <lanyue@kylinos.cn>  Tue, 10 Nov 2020 10:31:41 +0800
+
 libinput-touch-translator (1.0.0-1) unstable; urgency=medium
 
   * Initial release. (Closes: #968662)
