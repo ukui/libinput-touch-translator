@@ -1,4 +1,4 @@
-libinput-touch-translator (1.0.0-1+1110) v101; urgency=medium
+libinput-touch-translator (1.0.0-1+1110.2) v101; urgency=medium
 
   * fix can not auto start.
 
