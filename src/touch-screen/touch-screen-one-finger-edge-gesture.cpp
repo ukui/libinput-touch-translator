@@ -33,7 +33,7 @@ TouchScreenOneFingerEdgeGesture::TouchScreenOneFingerEdgeGesture(QObject *parent
 TouchScreenGestureInterface::State TouchScreenOneFingerEdgeGesture::handleInputEvent(libinput_event *event)
 {
     // do not handle edge gesture.
-    return;
+    return Ignore;
     switch (libinput_event_get_type(event)) {
     case LIBINPUT_EVENT_TOUCH_DOWN: {
         m_fingerCount++;

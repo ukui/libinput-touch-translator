@@ -31,6 +31,7 @@ TouchScreenTwoFingerSwipeGesture::TouchScreenTwoFingerSwipeGesture(QObject *pare
 
 TouchScreenGestureInterface::State TouchScreenTwoFingerSwipeGesture::handleInputEvent(libinput_event *event)
 {
+    return Ignore;
     switch (libinput_event_get_type(event)) {
     case LIBINPUT_EVENT_TOUCH_DOWN: {
         m_currentFingerCount++;
