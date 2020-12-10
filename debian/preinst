@@ -1,1 +1,6 @@
+#!/bin/bash
+set -e
+
+#DEBHELPER#
+
 rm /etc/xdg/ukui/gestures.conf
