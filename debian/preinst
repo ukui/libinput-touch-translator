@@ -3,4 +3,4 @@ set -e
 
 #DEBHELPER#
 
-rm /etc/xdg/ukui/gestures.conf
+rm -f /etc/xdg/ukui/gestures.conf
