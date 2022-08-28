@@ -9,7 +9,7 @@ This project is aim to providing a common resolusion for translate an "unclear" 
 
 There are some similar projects, such as [**libinput-gesetures**](https://github.com/bulletmark/libinput-gestures) and [**touchegg**](http://code.google.com/p/touchegg), having a good performance about improving user interaction of touching.
 
-However, the exsited projects are almost platform related, they might work well on X11, but not well on Wayland. So, I reference their idea and reimplement a new project, which we are talking about.
+However, the existed projects are almost platform related, they might work well on X11, but not well on Wayland. So, I reference their idea and reimplement a new project, which we are talking about.
 
 ## How it works
 
@@ -21,7 +21,7 @@ As I said, this project is aim to providing a common resolution, that means no w
 
 ## Usage
 
-I provide a graphics interface for configure the shortcut of different touch gestures. However it must have permission for modification, because the project must run in system wide. Note that the shortcut must be supported in existed system, make sure you have learn about the shortcuts in your computer, or learn about how to config them to fit into the translator. For example, map four finger swipe gesture to 'Alt+Tab' or 'Shift+Alt+Tab' for switching window.
+I provide a graphics interface for configure the shortcut of different touch gestures. However, it must have permission for modification, because the project must run system wide. Note that the shortcut must be supported in existed system, make sure you have learn about the shortcuts in your computer, or learn about how to config them to fit into the translator. For example, map four finger swipe gesture to 'Alt+Tab' or 'Shift+Alt+Tab' for switching window.
 
 # Hacking
 
